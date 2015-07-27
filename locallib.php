@@ -32,12 +32,12 @@ function bigbluebuttonbn_log(array $bbbsession, $event) {
     
     $log->meetingid = $bbbsession['meetingid'];
     $log->courseid = $bbbsession['courseid']; 
-    $log->bigbluebuttonbnid = $bbbsession['bigbluebuttonbnid'];
+    $log->streamlineid = $bbbsession['streamlineid'];
     $log->record = $bbbsession['textflag']['record'] == 'true'? 1: 0;
     $log->timecreated = time();
     $log->event = $event;
+    $returnid = $DB->insert_record('streamline_log', $log);
     
-    $returnid = $DB->insert_record('bigbluebuttonbn_log', $log);
     
 }
  ////////////////////////////

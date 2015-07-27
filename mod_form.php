@@ -1,8 +1,8 @@
 <?php
 /**
- * Config all BigBlueButtonBN instances in this course.
+ * Config all streamline instances in this course.
  * 
- * @package   mod_bigbluebuttonbn
+ * @package   mod_streamline
  * @author    Fred Dixon  (ffdixon [at] blindsidenetworks [dt] com)
  * @author    Jesus Federico  (jesus [at] blindsidenetworks [dt] com)
  * @copyright 2010-2014 Blindside Networks Inc.
@@ -24,11 +24,11 @@ class mod_streamline_mod_form extends moodleform_mod {
         $course_module_id = optional_param('update', 0, PARAM_INT); // course_module ID, or
         if ($course_id) {
             $course = $DB->get_record('course', array('id' => $course_id), '*', MUST_EXIST);
-            $bigbluebuttonbn = null;
+            $streamline = null;
         } else if ($course_module_id) {
-            $cm = get_coursemodule_from_id('bigbluebuttonbn', $course_module_id, 0, false, MUST_EXIST);
+            $cm = get_coursemodule_from_id('streamline', $course_module_id, 0, false, MUST_EXIST);
             $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
-            $bigbluebuttonbn = $DB->get_record('bigbluebuttonbn', array('id' => $cm->instance), '*', MUST_EXIST);
+            $streamline = $DB->get_record('streamline', array('id' => $cm->instance), '*', MUST_EXIST);
         }
 
         if ( $CFG->version < '2013111800' ) {
@@ -41,13 +41,13 @@ class mod_streamline_mod_form extends moodleform_mod {
         //error_log('context: ' . print_r($context, true));
         
         //BigBlueButton server data
-        $url = trim(trim($CFG->BigBlueButtonBNServerURL),'/').'/';
-        $salt = trim($CFG->BigBlueButtonBNSecuritySalt);
+        $url = trim(trim($CFG->ServerURLforBigBlueButton),'/').'/';
+        $salt = trim($CFG->BigBlueButtonSaltKey);
 
         //Validates if the BigBlueButton server is running 
         $serverVersion = bigbluebuttonbn_getServerVersion($url); 
         if ( !isset($serverVersion) ) {
-            print_error( 'general_error_unable_connect', 'bigbluebuttonbn', $CFG->wwwroot.'/admin/settings.php?section=modsettingbigbluebuttonbn' );
+            print_error( 'general_error_unable_connect', 'streamline', $CFG->wwwroot.'/admin/settings.php?section=modsettingstreamline' );
         }
 
         $mform =& $this->_form;
@@ -56,27 +56,42 @@ class mod_streamline_mod_form extends moodleform_mod {
         //-------------------------------------------------------------------------------
         // First block starts here
         //-------------------------------------------------------------------------------
-        $mform->addElement('header', 'general', get_string('mod_form_block_general', 'bigbluebuttonbn'));
+        $mform->addElement('header', 'general', get_string('mod_form_block_general', 'streamline'));
 
-        $mform->addElement('text', 'name', get_string('mod_form_field_name','bigbluebuttonbn'), 'maxlength="64" size="32"' );
+        $mform->addElement('text', 'name', get_string('mod_form_field_name','streamline'), 'maxlength="64" size="32"' );
         $mform->addRule( 'name', null, 'required', null, 'client' );
         $mform->setType('name', PARAM_TEXT);
 
-        $mform->addElement('textarea', 'welcome', get_string('mod_form_field_welcome','bigbluebuttonbn'), 'wrap="virtual" rows="5" cols="60"');
-        $mform->addHelpButton('welcome', 'mod_form_field_welcome', 'bigbluebuttonbn');
+		$courseName = $course->shortname;
+		//$section = optional_param('section',0,PARAM_INT); Marked for cleanup
 
-        //$mform->addElement('text', 'voicebridge', get_string('mod_form_field_voicebridge','bigbluebuttonbn'), 'maxlength="5" size="10"' );
+		//Get the number of current streamline sessions in this course
+		$record = $DB->get_record_sql('SELECT * FROM {modules} WHERE name=?', array('streamline'));
+		$records = $DB->get_records_sql('SELECT * FROM {course_modules} WHERE course=? AND module=?', array($course->id, $record->id));
+		$count = count($records)+1;
+		
+		$week = "Lecture ";
+		$sessionName = $week.$count;
+        $mform->setDefault( 'name', $sessionName );
+		
+		
+        $mform->addElement('textarea', 'welcome', get_string('mod_form_field_welcome','streamline'), 'wrap="virtual" rows="5" cols="60"');
+        $mform->addHelpButton('welcome', 'mod_form_field_welcome', 'streamline');
+        $mform->setDefault( 'welcome', "Welcome to the lecture for week ".$section );
+
+
+        //$mform->addElement('text', 'voicebridge', get_string('mod_form_field_voicebridge','streamline'), 'maxlength="5" size="10"' );
         //$mform->setDefault( 'voicebridge', 0 );
-        //$mform->addHelpButton('voicebridge', 'mod_form_field_voicebridge', 'bigbluebuttonbn');
+        //$mform->addHelpButton('voicebridge', 'mod_form_field_voicebridge', 'streamline');
 
-        $mform->addElement( 'checkbox', 'newwindow', get_string('mod_form_field_newwindow', 'bigbluebuttonbn') );
-        $mform->setDefault( 'newwindow', 0 );
+        //$mform->addElement( 'checkbox', 'newwindow', get_string('mod_form_field_newwindow', 'streamline') );
+        //$mform->setDefault( 'newwindow', 0 );
 
-        $mform->addElement( 'checkbox', 'wait', get_string('mod_form_field_wait', 'bigbluebuttonbn') );
-        $mform->setDefault( 'wait', 1 );
+        //$mform->addElement( 'checkbox', 'wait', get_string('mod_form_field_wait', 'streamline') );
+        //$mform->setDefault( 'wait', 0 );
 
-        $mform->addElement('text', 'userlimit', get_string('mod_form_field_userlimit','bigbluebuttonbn'), 'maxlength="3" size="5"' );
-        $mform->addHelpButton('userlimit', 'mod_form_field_userlimit', 'bigbluebuttonbn');
+        $mform->addElement('text', 'userlimit', get_string('mod_form_field_userlimit','streamline'), 'maxlength="3" size="5"' );
+        $mform->addHelpButton('userlimit', 'mod_form_field_userlimit', 'streamline');
         $mform->setDefault( 'userlimit', 0 );
         $mform->setType('userlimit', PARAM_TEXT);
         //-------------------------------------------------------------------------------
@@ -87,41 +102,41 @@ class mod_streamline_mod_form extends moodleform_mod {
         //-------------------------------------------------------------------------------
         // Second block starts here
         //-------------------------------------------------------------------------------
-        $mform->addElement('header', 'general', get_string('mod_form_block_participants', 'bigbluebuttonbn'));
+        $mform->addElement('header', 'general', get_string('mod_form_block_participants', 'streamline'));
 
-        //$mform->addElement( 'checkbox', 'allmoderators', get_string('mod_form_field_allmoderators', 'bigbluebuttonbn') );
+        //$mform->addElement( 'checkbox', 'allmoderators', get_string('mod_form_field_allmoderators', 'streamline') );
         //$mform->setDefault( 'allmoderators', 0 );
 
         // Data required for "Add participant" and initial "Participant list" setup
         $roles = bigbluebuttonbn_get_roles();
         $users = bigbluebuttonbn_get_users($context);
 
-        $participant_list = bigbluebuttonbn_get_participant_list($bigbluebuttonbn != null? $bigbluebuttonbn: null, $context);
+        $participant_list = bigbluebuttonbn_get_participant_list($streamline != null? $streamline: null, $context);
         $mform->addElement('hidden', 'participants', json_encode($participant_list));
         $mform->setType('participants', PARAM_TEXT);
         
         $html_participant_selection = ''.
              '<div id="fitem_bigbluebuttonbn_participant_selection" class="fitem fitem_fselect">'."\n".
              '  <div class="fitemtitle">'."\n".
-             '    <label for="bigbluebuttonbn_participant_selectiontype">'.get_string('mod_form_field_participant_add', 'bigbluebuttonbn').' </label>'."\n".
+             '    <label for="bigbluebuttonbn_participant_selectiontype">'.get_string('mod_form_field_participant_add', 'streamline').' </label>'."\n".
              '  </div>'."\n".
              '  <div class="felement fselect">'."\n".
              '    <select id="bigbluebuttonbn_participant_selection_type" onchange="bigbluebuttonbn_participant_selection_set(); return 0;">'."\n".
-             '      <option value="all" selected="selected">'.get_string('mod_form_field_participant_list_type_all', 'bigbluebuttonbn').'</option>'."\n".
-             '      <option value="role">'.get_string('mod_form_field_participant_list_type_role', 'bigbluebuttonbn').'</option>'."\n".
-             '      <option value="user">'.get_string('mod_form_field_participant_list_type_user', 'bigbluebuttonbn').'</option>'."\n".
+             '      <option value="all" selected="selected">'.get_string('mod_form_field_participant_list_type_all', 'streamline').'</option>'."\n".
+             '      <option value="role">'.get_string('mod_form_field_participant_list_type_role', 'streamline').'</option>'."\n".
+             '      <option value="user">'.get_string('mod_form_field_participant_list_type_user', 'streamline').'</option>'."\n".
              '    </select>'."\n".
              '    &nbsp;&nbsp;'."\n".
              '    <select id="bigbluebuttonbn_participant_selection" disabled="disabled">'."\n".
              '      <option value="all" selected="selected">---------------</option>'."\n".
              '    </select>'."\n".
              '    &nbsp;&nbsp;'."\n".
-             '    <input value="'.get_string('mod_form_field_participant_list_action_add', 'bigbluebuttonbn').'" type="button" id="id_addselectionid" onclick="bigbluebuttonbn_participant_add(); return 0;" />'."\n".
+             '    <input value="'.get_string('mod_form_field_participant_list_action_add', 'streamline').'" type="button" id="id_addselectionid" onclick="bigbluebuttonbn_participant_add(); return 0;" />'."\n".
              '  </div>'."\n".
              '</div>'."\n".
              '<div id="fitem_bigbluebuttonbn_participant_list" class="fitem">'."\n".
              '  <div class="fitemtitle">'."\n".
-             '    <label for="bigbluebuttonbn_participant_list">'.get_string('mod_form_field_participant_list', 'bigbluebuttonbn').' </label>'."\n".
+             '    <label for="bigbluebuttonbn_participant_list">'.get_string('mod_form_field_participant_list', 'streamline').' </label>'."\n".
              '  </div>'."\n".
              '  <div class="felement fselect">'."\n".
              '    <table id="participant_list_table">'."\n";
@@ -131,7 +146,7 @@ class mod_streamline_mod_form extends moodleform_mod {
             $participant_selectionid = '';
             $participant_selectiontype = $participant['selectiontype'];
             if( $participant_selectiontype == 'all') {
-                $participant_selectiontype = '<b><i>'.get_string('mod_form_field_participant_list_type_'.$participant_selectiontype, 'bigbluebuttonbn').'</i></b>';
+                $participant_selectiontype = '<b><i>'.get_string('mod_form_field_participant_list_type_'.$participant_selectiontype, 'streamline').'</i></b>';
             } else {
                 if ( $participant_selectiontype == 'role') {
                     $participant_selectionid = bigbluebuttonbn_get_role_name($participant['selectionid']);
@@ -143,19 +158,19 @@ class mod_streamline_mod_form extends moodleform_mod {
                         }
                     }
                 }
-                $participant_selectiontype = '<b><i>'.get_string('mod_form_field_participant_list_type_'.$participant_selectiontype, 'bigbluebuttonbn').':</i></b>&nbsp;';
+                $participant_selectiontype = '<b><i>'.get_string('mod_form_field_participant_list_type_'.$participant_selectiontype, 'streamline').':</i></b>&nbsp;';
             }
-            $participant_role = get_string('mod_form_field_participant_bbb_role_'.$participant['role'], 'bigbluebuttonbn');
+            $participant_role = get_string('mod_form_field_participant_bbb_role_'.$participant['role'], 'streamline');
             
             $html_participant_selection .= ''.
                 '      <tr id="participant_list_tr_'.$participant['selectiontype'].'-'.$participant['selectionid'].'">'."\n".
-                '        <td width="20px"><a onclick="bigbluebuttonbn_participant_remove(\''.$participant['selectiontype'].'\', \''.$participant['selectionid'].'\'); return 0;" title="'.get_string('mod_form_field_participant_list_action_remove', 'bigbluebuttonbn').'">x</a></td>'."\n".
+                '        <td width="20px"><a onclick="bigbluebuttonbn_participant_remove(\''.$participant['selectiontype'].'\', \''.$participant['selectionid'].'\'); return 0;" title="'.get_string('mod_form_field_participant_list_action_remove', 'streamline').'">x</a></td>'."\n".
                 '        <td width="125px">'.$participant_selectiontype.'</td>'."\n".
                 '        <td>'.$participant_selectionid.'</td>'."\n".
-                '        <td><i>&nbsp;'.get_string('mod_form_field_participant_list_text_as', 'bigbluebuttonbn').'&nbsp;</i>'."\n".
+                '        <td><i>&nbsp;'.get_string('mod_form_field_participant_list_text_as', 'streamline').'&nbsp;</i>'."\n".
                 '          <select id="participant_list_role_'.$participant['selectiontype'].'-'.$participant['selectionid'].'" onchange="bigbluebuttonbn_participant_list_role_update(\''.$participant['selectiontype'].'\', \''.$participant['selectionid'].'\'); return 0;">'."\n".
-                '            <option value="'.BIGBLUEBUTTONBN_ROLE_VIEWER.'" '.($participant['role'] == BIGBLUEBUTTONBN_ROLE_VIEWER? 'selected="selected" ': '').'>'.get_string('mod_form_field_participant_bbb_role_'.BIGBLUEBUTTONBN_ROLE_VIEWER, 'bigbluebuttonbn').'</option>'."\n".
-                '            <option value="'.BIGBLUEBUTTONBN_ROLE_MODERATOR.'" '.($participant['role'] == BIGBLUEBUTTONBN_ROLE_MODERATOR? 'selected="selected" ': '').'>'.get_string('mod_form_field_participant_bbb_role_'.BIGBLUEBUTTONBN_ROLE_MODERATOR, 'bigbluebuttonbn').'</option><select>'."\n".
+                '            <option value="'.BIGBLUEBUTTONBN_ROLE_VIEWER.'" '.($participant['role'] == BIGBLUEBUTTONBN_ROLE_VIEWER? 'selected="selected" ': '').'>'.get_string('mod_form_field_participant_bbb_role_'.BIGBLUEBUTTONBN_ROLE_VIEWER, 'streamline').'</option>'."\n".
+                '            <option value="'.BIGBLUEBUTTONBN_ROLE_MODERATOR.'" '.($participant['role'] == BIGBLUEBUTTONBN_ROLE_MODERATOR? 'selected="selected" ': '').'>'.get_string('mod_form_field_participant_bbb_role_'.BIGBLUEBUTTONBN_ROLE_MODERATOR, 'streamline').'</option><select>'."\n".
                 '        </td>'."\n".
                 '      </tr>'."\n";
         }
@@ -164,7 +179,7 @@ class mod_streamline_mod_form extends moodleform_mod {
              '    </table>'."\n".
              '  </div>'."\n".
              '</div>'."\n".
-             '<script type="text/javascript" src="'.$CFG->wwwroot.'/mod/bigbluebuttonbn/mod_form.js">'."\n".
+             '<script type="text/javascript" src="'.$CFG->wwwroot.'/mod/streamline/mod_form.js">'."\n".
              '</script>'."\n";
 
         $mform->addElement('html', $html_participant_selection);
@@ -172,10 +187,10 @@ class mod_streamline_mod_form extends moodleform_mod {
         // Add data
         $mform->addElement('html', '<script type="text/javascript">var bigbluebuttonbn_participant_selection = {"all": [], "role": '.json_encode($roles).', "user": '.json_encode($users).'}; </script>');
         $mform->addElement('html', '<script type="text/javascript">var bigbluebuttonbn_participant_list = '.json_encode($participant_list).'; </script>');
-        $bigbluebuttonbn_strings = Array( "as" => get_string('mod_form_field_participant_list_text_as', 'bigbluebuttonbn'),
-                                          "viewer" => get_string('mod_form_field_participant_bbb_role_viewer', 'bigbluebuttonbn'),
-                                          "moderator" => get_string('mod_form_field_participant_bbb_role_moderator', 'bigbluebuttonbn'),
-                                          "remove" => get_string('mod_form_field_participant_list_action_remove', 'bigbluebuttonbn'),
+        $bigbluebuttonbn_strings = Array( "as" => get_string('mod_form_field_participant_list_text_as', 'streamline'),
+                                          "viewer" => get_string('mod_form_field_participant_bbb_role_viewer', 'streamline'),
+                                          "moderator" => get_string('mod_form_field_participant_bbb_role_moderator', 'streamline'),
+                                          "remove" => get_string('mod_form_field_participant_list_action_remove', 'streamline'),
                                     );
         $mform->addElement('html', '<script type="text/javascript">var bigbluebuttonbn_strings = '.json_encode($bigbluebuttonbn_strings).'; </script>');
         //-------------------------------------------------------------------------------
@@ -186,11 +201,11 @@ class mod_streamline_mod_form extends moodleform_mod {
         //-------------------------------------------------------------------------------
         // Third block starts here
         //-------------------------------------------------------------------------------
-        $mform->addElement('header', 'general', get_string('mod_form_block_schedule', 'bigbluebuttonbn'));
+        $mform->addElement('header', 'general', get_string('mod_form_block_schedule', 'streamline'));
 
-        $mform->addElement('date_time_selector', 'timeavailable', get_string('mod_form_field_availabledate', 'bigbluebuttonbn'), array('optional'=>true));
+        $mform->addElement('date_time_selector', 'timeavailable', get_string('mod_form_field_availabledate', 'streamline'), array('optional'=>true));
         $mform->setDefault('timeavailable', 0);
-        $mform->addElement('date_time_selector', 'timedue', get_string('mod_form_field_duedate', 'bigbluebuttonbn'), array('optional' => true));
+        $mform->addElement('date_time_selector', 'timedue', get_string('mod_form_field_duedate', 'streamline'), array('optional' => true));
         $mform->setDefault('timedue', 0);
         //-------------------------------------------------------------------------------
         // Third block ends here
@@ -201,17 +216,17 @@ class mod_streamline_mod_form extends moodleform_mod {
         // Fourth block starts here
         //-------------------------------------------------------------------------------
         if ( floatval($serverVersion) >= 0.8 ) {
-            $mform->addElement('header', 'general', get_string('mod_form_block_record', 'bigbluebuttonbn'));
+            $mform->addElement('header', 'general', get_string('mod_form_block_record', 'streamline'));
 
-            $mform->addElement( 'checkbox', 'record', get_string('mod_form_field_record', 'bigbluebuttonbn') );
-            $mform->setDefault( 'record', 0 );
+            $mform->addElement( 'checkbox', 'record', get_string('mod_form_field_record', 'streamline') );
+            $mform->setDefault( 'record', 1 );
 	
-            $mform->addElement('text', 'description', get_string('mod_form_field_description','bigbluebuttonbn'), 'maxlength="100" size="32"' );
-            $mform->addHelpButton('description', 'mod_form_field_description', 'bigbluebuttonbn');
+            $mform->addElement('text', 'description', get_string('mod_form_field_description','streamline'), 'maxlength="100" size="32"' );
+            $mform->addHelpButton('description', 'mod_form_field_description', 'streamline');
             $mform->setType('description', PARAM_TEXT);
-            //$mform->addElement('duration', 'timeduration', get_string('mod_form_field_duration', 'bigbluebuttonbn')); //Set zero for unlimited
+            //$mform->addElement('duration', 'timeduration', get_string('mod_form_field_duration', 'streamline')); //Set zero for unlimited
             //$mform->setDefault('timeduration', 14400);
-            //$mform->addHelpButton('timeduration', 'mod_form_field_duration', 'bigbluebuttonbn');
+            //$mform->addHelpButton('timeduration', 'mod_form_field_duration', 'streamline');
         }
         //-------------------------------------------------------------------------------
         // Fourth block ends here
@@ -234,7 +249,7 @@ class mod_streamline_mod_form extends moodleform_mod {
         $errors = parent::validation($data, $files);
 
         if ($data['timeavailable'] != 0 && $data['timedue'] != 0 && $data['timedue'] < $data['timeavailable']) {
-            $errors['timedue'] = get_string('bbbduetimeoverstartingtime', 'bigbluebuttonbn');
+            $errors['timedue'] = get_string('bbbduetimeoverstartingtime', 'streamline');
         }
         
         return $errors;

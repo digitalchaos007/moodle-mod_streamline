@@ -1,0 +1,41 @@
+#sendie                         { border: 3px solid #999; width: 100%; padding: 10px; font: 12px "Lucida Grande", Sans-Serif;  }
+
+
+#chat-area                      { height: 60%; overflow-y:scroll; background: white; }
+
+
+#chat-area span                 { color: white; background: #333; padding: 4px 8px; -moz-border-radius: 5px; -webkit-border-radius: 8px; margin: 0 5px 0 0; }
+
+
+#chat-area p                    { padding: 8px 0; border-bottom: 1px solid #ccc;width: 100%;  }
+
+#date { float: right; color: black; font-size: 10px; }
+
+/* AKSHAY 16/7/20115 */
+#chat {
+	list-style-type: none;
+	list-style-position:inside;
+	margin:0;
+	padding:5px; 
+	
+}
+
+.chat_msg {
+	list-style-type: none;
+	list-style-position:inside;
+	margin:0;
+	padding:0; 
+}
+
+.msg_name {
+	float: left;
+	margin-right: 5px;
+}
+
+.msg_text {
+	margin-right: 40px;
+}
+
+
+
+

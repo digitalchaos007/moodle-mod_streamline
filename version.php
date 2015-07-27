@@ -28,9 +28,9 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_streamline';
-$plugin->version = 100;
-$plugin->release = 'v4.3';
-$plugin->requires = 2014051600;
+$plugin->version = 20120627016;
+$plugin->release = 'v0.3';
+$plugin->requires = 2014051601;
 $plugin->maturity = MATURITY_ALPHA;
 $plugin->cron = 0;
 $plugin->dependencies = array();

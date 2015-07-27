@@ -20,7 +20,7 @@ class bigbluebuttonbn_meeting_ended extends \core\event\base {
     protected function init() {
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
-        $this->data['objecttable'] = 'bigbluebuttonbn';
+        $this->data['objecttable'] = 'streamline';
     }
 
     /**
@@ -29,7 +29,7 @@ class bigbluebuttonbn_meeting_ended extends \core\event\base {
      * @return string
      */
     public static function get_name() {
-        return get_string('event_meeting_ended', 'mod_bigbluebuttonbn');
+        return get_string('event_meeting_ended', 'mod_streamline');
     }
 
     /**
@@ -38,7 +38,7 @@ class bigbluebuttonbn_meeting_ended extends \core\event\base {
      * @return string
      */
     public function get_description() {
-        return "A bigbluebutton meeting for the bigbluebuttonbn activity with id '$this->contextinstanceid' for " .
+        return "A bigbluebutton meeting for the streamline activity with id '$this->contextinstanceid' for " .
         "the course id '$this->objectid' has been forcibly ended by the user with id '$this->userid'.";
     }
 
@@ -48,7 +48,7 @@ class bigbluebuttonbn_meeting_ended extends \core\event\base {
      * @return array
      */
     protected function get_legacy_logdata() {
-        return(array($this->courseid, 'bigbluebuttonbn', 'view',
+        return(array($this->courseid, 'streamline', 'view',
                 'view.php?pageid=' . $this->objectid, $this->objectid, $this->contextinstanceid));
     }
 
@@ -58,6 +58,6 @@ class bigbluebuttonbn_meeting_ended extends \core\event\base {
      * @return \moodle_url
      */
     public function get_url() {
-        return new \moodle_url('/mod/bigbluebuttonbn/view.php', array('id' => $this->objectid));
+        return new \moodle_url('/mod/streamline/view.php', array('id' => $this->objectid));
     }
 }

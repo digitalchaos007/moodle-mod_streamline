@@ -136,7 +136,7 @@ $bbbsession['cm'] = $cm;
 
 //Operation URLs
 $bbbsession['courseURL'] = $CFG->wwwroot.'/course/view.php?id='.$streamline->course;
-$bbbsession['logoutURL'] = $CFG->wwwroot.'/mod/streamline/view_end.php?id='.$id;
+$bbbsession['logoutURL'] = $CFG->wwwroot.'/course/view.php?id='.$course->id;
 
 //Metadata
 $bbbsession['origin'] = "Moodle";
@@ -187,15 +187,15 @@ if ( !has_capability('mod/streamline:join', $context) ) {
 // Output starts here
 echo $OUTPUT->header();
 
-$bbbsession['bigbluebuttonbnid'] = $streamline->id;
+$bbbsession['streamlineid'] = $streamline->id;
 /// find out current groups mode
 if (groups_get_activity_groupmode($cm) == 0) {  //No groups mode
-    $bbbsession['meetingid'] = $streamline->meetingid.'-'.$bbbsession['courseid'].'-'.$bbbsession['bigbluebuttonbnid'];
+    $bbbsession['meetingid'] = $streamline->meetingid.'-'.$bbbsession['courseid'].'-'.$bbbsession['streamlineid'];
     $bbbsession['meetingname'] = $streamline->name;
 } else {                                        // Separate groups mode
     //If doesnt have group
     $bbbsession['group'] = (!$group)?groups_get_activity_group($cm): $group;
-    $bbbsession['meetingid'] = $streamline->meetingid.'-'.$bbbsession['courseid'].'-'.$bbbsession['bigbluebuttonbnid'].'['.$bbbsession['group'].']';
+    $bbbsession['meetingid'] = $streamline->meetingid.'-'.$bbbsession['courseid'].'-'.$bbbsession['streamlineid'].'['.$bbbsession['group'].']';
     if( $bbbsession['group'] > 0 )
         $group_name = groups_get_group_name($bbbsession['group']);
     else
@@ -281,7 +281,7 @@ $jsVars = array(
         'joinurl' => $bbbsession['joinURL'],
         'joining' => ($joining? 'true':'false'),
         'bigbluebuttonbn_view' => $bigbluebuttonbn_view,
-        'bigbluebuttonbnid' => $bbbsession['bigbluebuttonbnid']
+        'bigbluebuttonbnid' => $bbbsession['streamlineid']
 );
 
 $jsmodule = array(

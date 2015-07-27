@@ -1,3 +1,17 @@
+<html>
+
+<head>
+   
+    <link rel="stylesheet" href="css/kube.min.css" />
+    <link rel="stylesheet" href="css/your-styles.css" />
+ 
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
+    <script src="js/kube.min.js"></script>
+	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+</head>
+</html>
+
 <?php
 // This file is part of Moodle - http://moodle.org/
 //
@@ -83,15 +97,29 @@ echo $bbbsession;*/
 // Replace the following lines with you own code.
 //echo $OUTPUT->heading('Yay! It works!');
 
-include 'BBB.php';
-//-------------------------------------------------------------------------------------
+//
+?>
+<div class="units-row">
+	<div class="unit-70">
+		<?php include 'BBB.php';?>
+	</div>
+	<div class="unit-30">
+		<?php 
+		$HStuList = null;
+		$StuList  = null;
+		$stuval   = bin2hex($USER->username);
 
-//include 'Chat/index2.php';
-
-
-
-
-
+		include 'Chat/DataPrep.php';
+		include 'Chat/StartChat.php';
+		include 'Chat/Chat.php';?>
+	</div>
+</div>
+<div class="units-row">
+	<div class="unit-100">
+		<?php include 'Forums/Forum.php';?>
+	</div>
+<div>
+<?php
 // Finish the page.
 echo $OUTPUT->footer();
 
