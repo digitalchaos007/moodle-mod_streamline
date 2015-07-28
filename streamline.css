@@ -11,21 +11,24 @@
 
 #middleContainer {
 	box-sizing:border-box; 
-	width: 75%;
+	/* width: 75%; */
 	height: 650px;
 	position: relative;
 	float: left;
 	min-height: 650px;
+	margin-left: 0px;
 
 }
 
 #rightContainer {
 	box-sizing:border-box; 
-	width: 25%;
+	/* width: 25%; */
 	height: 650px;
 	position: relative;
 	float: left;
 	min-height: 650px;
+	margin-left: 0px;
+
 }
 
 #top_liveView {
@@ -130,14 +133,12 @@
 #webinar_buttons {
 	box-sizing:border-box; 
 	width: 100%;
-	height: 50px;
 	padding-left: 1%;
 }
 
 #std_button {
 	box-sizing: border-box;
 	width: 33%;
-	height: 50px;
 	float:left;
 
 }
