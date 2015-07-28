@@ -77,7 +77,7 @@ class mod_streamline_mod_form extends moodleform_mod {
 		
         $mform->addElement('textarea', 'welcome', get_string('mod_form_field_welcome','streamline'), 'wrap="virtual" rows="5" cols="60"');
         $mform->addHelpButton('welcome', 'mod_form_field_welcome', 'streamline');
-        $mform->setDefault( 'welcome', "Welcome to the lecture for week ".$section );
+        $mform->setDefault( 'welcome', "Welcome to lecture ".$count." for ".$courseName );
 
 
         //$mform->addElement('text', 'voicebridge', get_string('mod_form_field_voicebridge','streamline'), 'maxlength="5" size="10"' );
