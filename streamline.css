@@ -140,7 +140,7 @@
 	box-sizing: border-box;
 	width: 33%;
 	float:left;
-
+	height: auto;
 }
 
 .fullscreen_button {
