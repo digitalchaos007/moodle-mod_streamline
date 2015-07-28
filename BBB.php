@@ -1,19 +1,10 @@
 <?php
-/*
-
- Please read the following crearfully ! ! !
-
- This file is a composition of our work inconjunction with the default BBB.
-
- I am not fully sure of what happends at locations where " ??? " is found.
-
-
-*/
-
-
 	require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 	require_once(dirname(__FILE__).'/locallib.php');
 	require_once(dirname(__FILE__).'/lib.php');
+
+		include 'Chat/DataPrep.php';
+		include 'Chat/StartChat.php';
 	
 	$bbbsession['salt'] = trim($CFG->BigBlueButtonSaltKey);
 	$bbbsession['url'] = trim(trim($CFG->ServerURLforBigBlueButton),'/').'/';
@@ -26,12 +17,10 @@
 	$id = $streamline -> id;
 	$dash = "-";
 	$meetingid=$meeting.$dash.$course.$dash.$id;
-
 	$meetingRunningUrl = bigbluebuttonbn_getIsMeetingRunningURL( $meetingid, $bbbsession['url'], $bbbsession['salt'] );
 	$recordingsURL = bigbluebuttonbn_getRecordingsArray($meetingid, $bbbsession['url'], $bbbsession['salt'] );
 	
 	$userID = $USER->id;
-
     //$context = context_module::instance($cm->id);
 	$context = get_context_instance(CONTEXT_COURSE,$COURSE->id);
 	$roles = get_user_roles($context, $USER->id, true);
@@ -45,7 +34,6 @@
 		$moderator = bigbluebuttonbn_is_moderator($userID, $roles, $participants);
 	}
 	$administrator = has_capability('moodle/category:manage', $context);
-
 	//104.155.215.138
 	global $CFG;
 	$ipaddress = trim($CFG->ServerURLforBigBlueButton);
@@ -53,26 +41,18 @@
 	$variable = trim(trim($variable2),'/').'/';
 	$moodle_dir = $CFG->wwwroot;
 	
-	?>
 
+		$HStuList = null;
+		$StuList  = null;
+		$stuval   = bin2hex($USER->username);
+
+
+	?>
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-
 	<link rel="stylesheet" type="text/css" href="streamline.css">
 
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-
-  <style type="text/css" media="screen"></style>
-
-  <script type="text/javascript" src="<?php Print($variable); ?>client/swfobject/swfobject.js"></script>
-
-<!--
-The follow is Akshay's, it is all in correlation to displaying the recordings.
--->
-<script>
-
-//------------------------------------ Variables -------------------------------------------
-
+	<script>
 		var meetingRunningUrl = <?php echo json_encode($meetingRunningUrl); ?>;
 		var recordings = <?php echo json_encode($recordingsURL); ?>;
 		var meetingRunningUrl = <?php echo json_encode($meetingRunningUrl); ?>;
@@ -80,37 +60,25 @@ The follow is Akshay's, it is all in correlation to displaying the recordings.
 		var administrator = <?php echo json_encode($administrator); ?>;
 		  
 		var sessionRunning = false;
-
 		var recordingURL = "";
-
-//------------------------------------ END Variables -------------------------------------------
-
-// This will trigger by default.
+		// A $( document ).ready() block.
 		$( document ).ready(function() {
-
-// Initial check				
+					
 			BBBSessionRunning();
-
 			var hasRecording = isRecording(); 
-
 			if(hasRecording && (administrator || moderator)) {
-
-      // This will animate the background of the options (view / start recording)
 				console.log("loading options screen");
 				$("#liveView").css("height", "0px");
 				$("#recordingView").css("display", "none");	
 				$("#optionView").css("visibility", "visible");
 				$("#top_liveView").css("display", "none");
 			} else if(sessionRunning || administrator || moderator) {
-
-      // will leave you at the top of the screen 
 				console.log("loading live screen");
 				$("#liveView").css("height", "100%");
 				$("#recordingView").css("display", "none");
 				$("#optionView").css("display", "none");
 				$("#top_liveView").css("display", "block");
 			} else {
-     // Nothing will happend NO screen 
 				console.log("loading playback screen");
 				$("#liveView").css("display", "none");
 				$("#optionView").css("display", "none");
@@ -119,16 +87,14 @@ The follow is Akshay's, it is all in correlation to displaying the recordings.
 				if(recordingURL != "") {
 					console.log("Recording Response");
 					console.log(recordings);
-
-     // Triggers the recorings ???
 					initRecordings();
 				}
 				else { // This runs when there is error
 					$("#recordingView").html("No recordings available for this lecture");
 				}				
+				//loadRecording();
 			}
 			console.log(sessionRunning);
-
 			$(".playback_button").click(function() {
 				console.log("Clicked Live Button .. now loading live screen");
 				$("#recordingView").css("display", "block");
@@ -149,7 +115,6 @@ The follow is Akshay's, it is all in correlation to displaying the recordings.
 				$("#recordingView").css("display", "none");
 				$("#optionView").css("display", "none")		
 				$("#top_liveView").css("display", "block");
-
 			});
 			
 			//Scroll to the sessionRecording
@@ -162,7 +127,6 @@ The follow is Akshay's, it is all in correlation to displaying the recordings.
 			document.getElementById("flashclient").style.width = value;		
 			console.log("Setting Flash Client Width to: " + value);			
 		}
-
 		function initRecordings() {
 			loadIframe(recordingURL);
 			
@@ -182,7 +146,6 @@ The follow is Akshay's, it is all in correlation to displaying the recordings.
 				div.className = 'section';
 				div.id = 's'+(i+1);
 				div.innerHTML = 'Section ' + (i+1);
-
 				div.onclick = createClickHandler(recordingURLs[i]);
 				document.getElementById('sectionContainer').appendChild(div);
 			}
@@ -271,7 +234,17 @@ The follow is Akshay's, it is all in correlation to displaying the recordings.
 		}
 				
 		</script>
-<script type="text/javascript">
+	
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <style type="text/css" media="screen">
+      html, body, #flashclient                { height:50%;}
+      body                                    { margin:0; padding:0; }
+      #altContent                             { /* style alt content */ }
+    </style>
+    <script type="text/javascript" src="<?php Print($variable); ?>client/swfobject/swfobject.js"></script>
+	
+	
+    <script type="text/javascript">
       swfobject.registerObject("ChatModule", "11", "expressInstall.swf");
       swfobject.registerObject("BigBlueButton", "11", "expressInstall.swf");
       swfobject.registerObject("WebcamPreviewStandalone", "11", "expressInstall.swf");
@@ -314,11 +287,12 @@ The follow is Akshay's, it is all in correlation to displaying the recordings.
   <body>
 	<div id ="top_liveView">
 		<div id="recordStatus" class="recordStatus_Off"> This Lecture is not being recorded </div>
-	
+		<!--div id="sectionContainer"><div class="section"></div><div class="section"></div></div-->
 	</div>
+	<div id="middleContainer">
 		<div id="liveView">
-			<div id="flashclient" style="background-color:#EEEEEE;height:80%;width:100%;float:left;">
-			   <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%" id="BigBlueButton" name="BigBlueButton" align="middle">
+			<div id="flashclient" style="background-color:#EEEEEE;height:100%;width:100%;float:left;">
+			   <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="50%" id="BigBlueButton" name="BigBlueButton" align="middle">
 				  <param name="movie" value="<?php Print($variable);?>client/BigBlueButton.swf?v=216" />
 				  <param name="quality" value="high" />
 				  <param name="allowfullscreen" value="true" />
@@ -347,6 +321,17 @@ The follow is Akshay's, it is all in correlation to displaying the recordings.
 		<div id="optionView">
 			<div class = "option_button playback_button">View Recording</div>
 			<div class = "option_button live_button">Start Session</div>
+		</div>
+	</div>
+	<div id="rightContainer">
+		<div id="webinar_buttons">
+			<div id="std_button" class="fullscreen_button"></div>
+			<div id="std_button" class="quiz_button"></div>
+			<div id="std_button" class="leave_button"></div>
+			<!-- input type="button" value="Full Screen" onclick="toggleFullScreen(document.getElementById('middleContainer'))" -->
+		</div>
+		<div id="chat_module">
+				<?php include 'Chat/Chat.php';?>
 		</div>
 	</div>
 
@@ -409,7 +394,4 @@ The follow is Akshay's, it is all in correlation to displaying the recordings.
   </script>
   
 </html>
-
-
-
 

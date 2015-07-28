@@ -1,13 +1,35 @@
-#sendie                         { border: 3px solid #999; width: 100%; padding: 10px; font: 12px "Lucida Grande", Sans-Serif;  }
+#sendie { 
+	border: 3px solid #999; 
+	width: 100%; 
+	padding: 10px; 
+	font: 12px "Lucida Grande", Sans-Serif; 
+	/* Added by Akshay - The send container must be positioned at the bottom of the chat module */
+	position: absolute;
+	bottom: 0px;
+	height: 50px;
+}
+
+#chat-area { 
+	height: 60%; 
+	overflow-y:scroll; 
+	background: white; }
 
 
-#chat-area                      { height: 60%; overflow-y:scroll; background: white; }
+#chat-area span { 
+	color: white; 
+	background: #333; 
+	padding: 4px 8px; 
+	-moz-border-radius: 5px; 
+	-webkit-border-radius: 8px; 
+	margin: 0 5px 0 0; 
+}
 
 
-#chat-area span                 { color: white; background: #333; padding: 4px 8px; -moz-border-radius: 5px; -webkit-border-radius: 8px; margin: 0 5px 0 0; }
-
-
-#chat-area p                    { padding: 8px 0; border-bottom: 1px solid #ccc; width: 100%;  }
+#chat-area p { 
+	padding: 8px 0; 
+	border-bottom: 1px solid #ccc; 
+	width: 100%;  
+}
 
 #date { float: right; color: black; font-size: 10px; }
 
@@ -16,6 +38,7 @@
 	list-style-type: none;
 	list-style-position:inside;
 	margin:0;
+	height: 525px;
 	padding:5px; 
 	
 }
@@ -36,6 +59,10 @@
 	margin-right: 40px;
 }
 
-
+.chat_send_msg {
+	position: absolute;
+	bottom: 50px;
+	margin-bottom:0px;
+}
 
 

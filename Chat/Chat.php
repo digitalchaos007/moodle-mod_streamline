@@ -17,7 +17,7 @@
   <script type="text/javascript">	
 
 			$(document).ready(function() {
-				$("#chat-area").animate({ scrollTop: $(document).height() }, "fast");
+				$("#chat_module").animate({ scrollTop: $(document).height() }, "fast");
 				return false;
 			});
 
@@ -38,11 +38,11 @@
 	});
 
 	socket.on('messback', function(message){
-		$('#chat-area').append(message);
+		$('#chat').append(message);
 	});
 
 	socket.on('loaded', function(history){
-		$('#chat-area').append(history);
+		$('#chat').append(history);
 	});
 
 
@@ -50,20 +50,11 @@
 </head>
 
 <body onload="loading()">
-  <div class="units-row">
-		<div id="webinar_buttons">
-		<div id="std_button" class="fullscreen_button"></div>
-		<div id="std_button" class="quiz_button"></div>
-		<div id="std_button" class="leave_button"></div>
-		</div>
 
-      <p id="name-area"></p>
-      <div id="chat-area">
-      </div>
-			<span class="label label-outline"></span>
-      <p>Your message: </p>
-				 <textarea id="sendie" rows="2"></textarea>
- 
-  </div>
+				<ul id="chat">
+				</ul>  
+
+    <p class="chat_send_msg">Your message: </p>
+		<textarea id="sendie" rows="2"></textarea>
 </body>
 </html>

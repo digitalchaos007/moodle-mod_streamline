@@ -100,20 +100,14 @@ echo $bbbsession;*/
 //
 ?>
 <div class="units-row">
-	<div class="unit-70">
+
+	<div class="unit-100">
 		<?php include 'BBB.php';?>
 	</div>
-	<div class="unit-30">
-		<?php 
-		$HStuList = null;
-		$StuList  = null;
-		$stuval   = bin2hex($USER->username);
 
-		include 'Chat/DataPrep.php';
-		include 'Chat/StartChat.php';
-		include 'Chat/Chat.php';?>
-	</div>
+
 </div>
+</br>
 <div class="units-row">
 	<div class="unit-100">
 		<?php include 'Forums/Forum.php';?>
