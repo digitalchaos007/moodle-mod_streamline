@@ -257,7 +257,7 @@ function xmldb_streamline_upgrade($oldversion) {
     // Second example, some hours later, the same day 2007/04/01
     // ... two more fields and one index were added to install.xml (note the micro increment
     // ... "01" in the last two digits of the version).
-    if ($oldversion < 2007040102) {
+    if ($oldversion < 2015072101) {
 
         // Define field timecreated to be added to streamline.
         $table = new xmldb_table('streamline');
