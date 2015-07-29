@@ -257,7 +257,7 @@ function xmldb_streamline_upgrade($oldversion) {
     // Second example, some hours later, the same day 2007/04/01
     // ... two more fields and one index were added to install.xml (note the micro increment
     // ... "01" in the last two digits of the version).
-    if ($oldversion < 2007040101) {
+    if ($oldversion < 2007040102) {
 
         // Define field timecreated to be added to streamline.
         $table = new xmldb_table('streamline');
@@ -287,6 +287,12 @@ function xmldb_streamline_upgrade($oldversion) {
         if (!$dbman->index_exists($table, $index)) {
             $dbman->add_index($table, $index);
         }
+		
+		//matts code
+		$field = new xmldb_field('meetingended', XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, null, null, 0, null);
+		  if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
 
         // Another save point reached.
         upgrade_mod_savepoint(true, 2012062707, 'streamline');
@@ -300,6 +306,8 @@ function xmldb_streamline_upgrade($oldversion) {
 
         upgrade_mod_savepoint(true, 2012062709, 'streamline');
     }
+	
+
 
 
 
