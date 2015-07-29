@@ -4,8 +4,7 @@
 	padding: 10px; 
 	font: 12px "Lucida Grande", Sans-Serif; 
 	/* Added by Akshay - The send container must be positioned at the bottom of the chat module */
-	position: absolute;
-	bottom: 0px;
+	position: relative;
 	height: 50px;
 }
 
@@ -60,8 +59,7 @@
 }
 
 .chat_send_msg {
-	position: absolute;
-	bottom: 50px;
+	position: relative;
 	margin-bottom:0px;
 }
 
