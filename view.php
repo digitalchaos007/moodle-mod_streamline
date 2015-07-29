@@ -150,6 +150,10 @@ $bbbsession['context'] = $course->fullname;
 $bbbsession['contextActivity'] = $streamline->name;
 $bbbsession['contextActivityDescription'] = $streamline->description;
 
+//Matts variables - placeholder
+
+$hasEnded = $streamline -> meetingended;
+
 //// BigBlueButton Setup Ends
 
 // Mark viewed by user (if required)
@@ -211,7 +215,9 @@ else
 
 $joining = false;
 $bigbluebuttonbn_view = '';
-if (!$streamline->timeavailable ) {
+
+// Matt edited: hasEnded has been added to each if statement to catch when the meeting has ended and start the after view function.
+if (!$streamline->timeavailable && $hasEnded == 0) {
     if (!$streamline->timedue || time() <= $streamline->timedue){
         //GO JOINING
         if( bigbluebuttonbn_is_user_limit_reached( $bbbsession ) ){
@@ -237,7 +243,7 @@ if (!$streamline->timeavailable ) {
         echo $OUTPUT->box_end();
     }
 
-} else if ( time() < $streamline->timeavailable ){
+} else if ( time() < $streamline->timeavailable && $hasEnded == 0){
     //CALLING BEFORE
     $bigbluebuttonbn_view = 'before';
     echo $OUTPUT->heading(get_string('bbbnotavailableyet', 'streamline'));
@@ -247,7 +253,7 @@ if (!$streamline->timeavailable ) {
 
     echo $OUTPUT->box_end();
 
-} else if (!$streamline->timedue || time() <= $streamline->timedue ) {
+} else if ((!$streamline->timedue || time() <= $streamline->timedue) && $hasEnded == 0 ) {
     //GO JOINING
     if( bigbluebuttonbn_is_user_limit_reached( $bbbsession ) ){
         if (!$streamline->newwindow) {
@@ -435,25 +441,28 @@ function bigbluebuttonbn_view_before( $bbbsession ){
     echo '</table>';
 }
 
+// Matt edited: Loads the BBB.php after the meeting has ended
 function bigbluebuttonbn_view_after( $bbbsession ){
 
+    global $DB, $CFG;
+	$id = optional_param('id', 0, PARAM_INT); // course_module ID, or
+	$cm = get_coursemodule_from_id('streamline', $id, 0, false, MUST_EXIST);
+	$streamline = $DB->get_record('streamline', array('id' => $cm->instance), '*', MUST_EXIST);
+	
+	
     $recordingsArray = bigbluebuttonbn_getRecordingsArray($bbbsession['meetingid'], $bbbsession['url'], $bbbsession['salt']);
-
-    if ( !isset($recordingsArray) || array_key_exists('messageKey', $recordingsArray)) {   // There are no recordings for this meeting
-        if ( $bbbsession['flag']['record'] )
-            print_string('bbbnorecordings', 'streamline');
-    } else {                                                                                // Actually, there are recordings for this meeting
-        echo '    <center>'."\n";
-        echo '      <table cellpadding="0" cellspacing="0" border="0" class="display" id="example">'."\n";
-        echo '        <thead>'."\n";
-        echo '        </thead>'."\n";
-        echo '        <tbody>'."\n";
-        echo '        </tbody>'."\n";
-        echo '        <tfoot>'."\n";
-        echo '        </tfoot>'."\n";
-        echo '      </table>'."\n";
-        echo '    </center>'."\n";
-    }
+	if($streamline -> meetingended == 0)
+	{
+		$dataObj = new stdClass();
+		$dataObj->id = $streamline -> id;
+		$dataObj -> meetingended = 1;
+		$table = 'streamline';
+		$DB -> update_record($table,$dataObj );
+	}
+	$moodle_Dir = "streamline_view.php?id=".$id;
+	
+	include 'BBB.php';
+	
 }
 
 function bigbluebuttonbn_is_user_limit_reached( $bbbsession ){
@@ -466,3 +475,8 @@ function bigbluebuttonbn_is_user_limit_reached( $bbbsession ){
 
     return true;
 }
+
+
+?>
+
+

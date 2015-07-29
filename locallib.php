@@ -40,6 +40,93 @@ function bigbluebuttonbn_log(array $bbbsession, $event) {
     
     
 }
+
+
+/////////////////////////////
+// Matts custom functions  //
+////////////////////////////
+
+function end_meeting() {
+    return bigbluebuttonbn_getEndMeetingURL(get_meetingid(),get_modpassword(), get_url(), get_salt());
+	//$curl = curl_init();
+	//curl_setopt($curl, CURLOPT_URL, $end_url);
+	//$result = curl_exec($curl);
+	//echo $result;
+}
+
+function get_url()
+{
+	global $CFG;
+	$url = trim(trim($CFG->ServerURLforBigBlueButton),'/').'/';
+	return $url;
+}
+
+function get_salt()
+{
+	global $CFG;
+	$salt = trim($CFG->BigBlueButtonSaltKey);
+	return $salt;
+}
+
+function get_meetingid()
+{
+	$streamline = get_db();
+	$course = get_courseinfo();
+    $meetingid = $streamline->meetingid.'-'.$course->id.'-'.$streamline->id;
+	return $meetingid;
+}
+
+function get_modpassword()
+{
+	$streamline = get_db();
+	$moderator_pw = $streamline->moderatorpass;
+	return $moderator_pw;
+}
+
+function get_db()
+{
+	global $DB, $CFG;
+	$id = optional_param('id', 0, PARAM_INT); // course_module ID, or
+	$b  = optional_param('n', 0, PARAM_INT);  // streamline instance ID
+	$group  = optional_param('group', 0, PARAM_INT);  // streamline group ID
+
+	if ($id) {
+		$cm = get_coursemodule_from_id('streamline', $id, 0, false, MUST_EXIST);
+		$course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
+		$streamline = $DB->get_record('streamline', array('id' => $cm->instance), '*', MUST_EXIST);
+	} elseif ($b) {
+		$streamline = $DB->get_record('streamline', array('id' => $n), '*', MUST_EXIST);
+		$course = $DB->get_record('course', array('id' => $streamline->course), '*', MUST_EXIST);
+		$cm = get_coursemodule_from_instance('streamline', $streamline->id, $course->id, false, MUST_EXIST);
+	} else {
+		print_error('You must specify a course_module ID or an instance ID');
+	}
+	return $streamline;
+
+}
+
+function get_courseinfo()
+{
+	global $DB, $CFG;
+	$id = optional_param('id', 0, PARAM_INT); // course_module ID, or
+	$b  = optional_param('n', 0, PARAM_INT);  // streamline instance ID
+	$group  = optional_param('group', 0, PARAM_INT);  // streamline group ID
+
+	if ($id) {
+		$cm = get_coursemodule_from_id('streamline', $id, 0, false, MUST_EXIST);
+		$course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
+		$streamline = $DB->get_record('streamline', array('id' => $cm->instance), '*', MUST_EXIST);
+	} elseif ($b) {
+		$streamline = $DB->get_record('streamline', array('id' => $n), '*', MUST_EXIST);
+		$course = $DB->get_record('course', array('id' => $streamline->course), '*', MUST_EXIST);
+		$cm = get_coursemodule_from_instance('streamline', $streamline->id, $course->id, false, MUST_EXIST);
+	} else {
+		print_error('You must specify a course_module ID or an instance ID');
+	}
+	return $course;
+
+}
+
  ////////////////////////////
 //  BigBlueButton API Calls  //
  ////////////////////////////

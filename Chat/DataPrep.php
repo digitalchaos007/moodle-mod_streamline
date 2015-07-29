@@ -1,6 +1,6 @@
 <?php
 
-		global $CFG, $DB, $OUTPUT, $HStuList, $StuList;
+		global $CFG, $DB, $OUTPUT, $HStuList, $StuList, $course;
 
 $a1 = user_has_role_assignment($USER->id,1);
 $a2 = user_has_role_assignment($USER->id,2);

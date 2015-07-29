@@ -3,22 +3,26 @@
 	require_once(dirname(__FILE__).'/locallib.php');
 	require_once(dirname(__FILE__).'/lib.php');
 
+	
+		
+	global $DB, $CFG, $USER, $COURSE;
+	
 		include 'Chat/DataPrep.php';
 		include 'Chat/StartChat.php';
 	
 	$bbbsession['salt'] = trim($CFG->BigBlueButtonSaltKey);
 	$bbbsession['url'] = trim(trim($CFG->ServerURLforBigBlueButton),'/').'/';
 	$id = optional_param('id', 0, PARAM_INT);
-	global $DB;
 	$cm = get_coursemodule_from_id('streamline', $id, 0, false, MUST_EXIST);
 	$streamline = $DB->get_record('streamline', array('id' => $cm->instance), '*', MUST_EXIST);
 	$meeting = $streamline -> meetingid;
 	$course = $streamline -> course;
-	$id = $streamline -> id;
+	$ids = $streamline -> id;
 	$dash = "-";
-	$meetingid=$meeting.$dash.$course.$dash.$id;
+	$meetingid=$meeting.$dash.$course.$dash.$ids;
 	$meetingRunningUrl = bigbluebuttonbn_getIsMeetingRunningURL( $meetingid, $bbbsession['url'], $bbbsession['salt'] );
 	$recordingsURL = bigbluebuttonbn_getRecordingsArray($meetingid, $bbbsession['url'], $bbbsession['salt'] );
+	$end_meeting_url = end_meeting();
 	
 	$userID = $USER->id;
     //$context = context_module::instance($cm->id);
@@ -35,7 +39,6 @@
 	}
 	$administrator = has_capability('moodle/category:manage', $context);
 	//104.155.215.138
-	global $CFG;
 	$ipaddress = trim($CFG->ServerURLforBigBlueButton);
 	$variable2 = substr($ipaddress, 0, strpos($ipaddress, "b"));
 	$variable = trim(trim($variable2),'/').'/';
@@ -66,7 +69,7 @@
 		var moderator = <?php echo json_encode($moderator); ?>;
 		var administrator = <?php echo json_encode($administrator); ?>;
 		var teacher = <?php echo json_encode($teacher); ?>;
-
+		var end_meeting_url =  <?php echo json_encode($end_meeting_url); ?>; // This is the url request that ends the meeting; MATT
 		  
 		var sessionRunning = false;
 		var recordingURL = "";
@@ -200,6 +203,24 @@
 				  }
 			});
 		}
+		//added by Matt, ends the meeting completely
+		function exitMeeting(){
+			
+			var xmlHttp = new XMLHttpRequest();
+			xmlHttp.open( "GET", end_meeting_url, false );
+			xmlHttp.send( null );	
+			
+			$.get('endmeeting.php?id=<?php echo $id; ?>', function(){
+            //successful ajax request
+			}).error(function(){
+            alert('error... ohh no!');
+			});
+			
+			alert("Meeting ended");
+			window.location.href = "<?php echo($moodle_dir);?>/mod/streamline/view.php?id=<?php echo $id; ?>";  
+			
+		}
+		
 		
 		function BBBSessionRunning() {
 			$.ajax({
@@ -400,6 +421,9 @@
 	
 	$('.leave_button').click(function() {
 		//Add logout/leave javascript here
+		// Runs function created by Matt which ends the meeting and redirects to view.php
+		//look in endmeeting.php for more info on what this function does
+		exitMeeting();
 	});
 	$('.quiz_button').click(function() {
 		//Add quiz javascript here
