@@ -451,10 +451,25 @@
 	
 	
 	$('.leave_button').click(function() {
+		BBBSessionRunning();
+		//alert(sessionRunning);
 		//Add logout/leave javascript here
 		// Runs function created by Matt which ends the meeting and redirects to view.php
 		//look in endmeeting.php for more info on what this function does
-		exitMeeting();
+		if(sessionRunning == true) {
+			var x;
+			if (confirm("Are you sure you want to end the meeting?") == true) {
+				exitMeeting();
+			} else {
+			
+			}
+		
+		}
+		else{
+			alert("The session has either already ended or has just been created within the last 2 minutes. Please start a new session or wait 2 minutes for the meeting to be fully created.");
+			
+		}
+
 	});
 	$('.quiz_button').click(function() {
 		//Add quiz javascript here
