@@ -57,12 +57,22 @@
 		$teacher = false;
 	}
 
+	//Determine if the meeting has ended based on on the 'meetingended' field in the DB
+	if($streamline -> meetingended == 1) {
+		$meetingEnded = true;
+	} else {
+		$meetingEnded = false;
+	}
+
+
 	?>
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="streamline.css">
 
 	<script>
+	
+		/* PHP Variables */
 		var meetingRunningUrl = <?php echo json_encode($meetingRunningUrl); ?>;
 		var recordings = <?php echo json_encode($recordingsURL); ?>;
 		var meetingRunningUrl = <?php echo json_encode($meetingRunningUrl); ?>;
@@ -70,42 +80,66 @@
 		var administrator = <?php echo json_encode($administrator); ?>;
 		var teacher = <?php echo json_encode($teacher); ?>;
 		var end_meeting_url =  <?php echo json_encode($end_meeting_url); ?>; // This is the url request that ends the meeting; MATT
-		  
+		var meetingEnded = <?php echo json_encode($meetingEnded); ?>;
+		
+		/* Variables */
 		var sessionRunning = false;
 		var recordingURL = "";
-		// A $( document ).ready() block.
+
 		$( document ).ready(function() {
 					
+			/* 	There are 3 screens which may be displayed for the user. There are 3 cases for each screen to be loaded as described below
+				CASE 1 - Meeting has not ended, there exists a recording and the user has the relevant permissions (admin, moderator, teacher)
+						Load the options screen
+				CASE 2 - Meeting has not ended and either:
+					The session is running (moderator has joined meeting) OR
+					The user has relevant permissions (admin, moderator, teacher)
+						Load the live screen
+				CASE 3 - All other cases - Meeting has ended or (session not running and user does not have permissions to start a session)
+					CASE 3.1 - Recording exists
+						Load the playback screen with the recording
+					CASE 3.2 - Recording does not exist
+						Load the playback screen displaying no recordings exist
+			*/		
+			
 			BBBSessionRunning();
 			var hasRecording = isRecording(); 
-			if(hasRecording && (administrator || moderator || teacher)) {
+			/* 	Case 1 - Load options screen */
+			if(!meetingEnded && hasRecording && (administrator || moderator || teacher)) {
 				console.log("loading options screen");
 				$("#liveView").css("height", "0px");
 				$("#recordingView").css("display", "none");	
 				$("#optionView").css("visibility", "visible");
 				$("#top_liveView").css("display", "none");
-			} else if(sessionRunning || administrator || moderator || teacher) {
+			/* 	Case 2 - Load live screen */
+			} else if(!meetingEnded && (sessionRunning || administrator || moderator || teacher)) {
 				console.log("loading live screen");
 				$("#liveView").css("height", "100%");
 				$("#recordingView").css("display", "none");
 				$("#optionView").css("display", "none");
 				$("#top_liveView").css("display", "block");
+			/* 	Case 3 - Load playback screen */
 			} else {
 				console.log("loading playback screen");
 				$("#liveView").css("display", "none");
 				$("#optionView").css("display", "none");
 				$("#recordingView").css("visibility", "visible");
 				$("#top_liveView").css("display", "none");
+				/* Case 3.1 - Load playback displaying the recording */
 				if(recordingURL != "") {
 					console.log("Recording Response");
 					console.log(recordings);
 					initRecordings();
 				}
-				else { // This runs when there is error
-					$("#recordingView").html("No recordings available for this lecture");
+				else { /* Case 3.2 - Load playback with no recording message */
+					if(meetingEnded) {
+						$("#recordingView").html("<p class='session_no_record'> Sorry, this webinar session has been ended! <br> If the session was recorded, please wait while the recording is processed... </p>");
+					} else {
+						$("#recordingView").html("<p class='session_no_record'> The webinar session is currently not running, please wait for the lecturer and/or moderator to join. <br> No recordings are available for this lecture at this time. </p>");
+					}
 				}				
-				//loadRecording();
 			}
+			
 			console.log(sessionRunning);
 			$(".playback_button").click(function() {
 				console.log("Clicked Live Button .. now loading live screen");
@@ -181,28 +215,6 @@
 				}			
 		}
 		
-		function loadRecording() {
-			$.ajax({
-				  type: "GET",
-				  url: recordingUrl,
-				  dataType: "xml",
-				  contentType: "text/xml; charset=\"utf-8\"",
-				  complete: function(xmlResponse) {
-					console.log(xmlResponse);
-					var recordingsResponse=xmlResponse.responseXML;
-					try{
-						console.log("Recording Response");
-						console.log(recordingsResponse);
-						var url=recordingsResponse[0].playbacks.presentation.url;
-						$("#recordingView").html("<iframe class='recording' width='100%' height='100%' frameborder='0' scrolling='no' marginheight='0' marginwidth='0' src='"+url+"'></iframe>");  
-					}
-					catch(e) // This runs when there is error
-					{
-						$("#recordingView").html("No recordings available for this lecture");
-					}
-				  }
-			});
-		}
 		//added by Matt, ends the meeting completely
 		function exitMeeting(){
 			
@@ -211,12 +223,12 @@
 			xmlHttp.send( null );	
 			
 			$.get('endmeeting.php?id=<?php echo $id; ?>', function(){
-            //successful ajax request
+				//successful ajax request
 			}).error(function(){
-            alert('error... ohh no!');
+				alert('error... ohh no!');
 			});
 			
-			alert("Meeting ended");
+			alert("The webinar session has been ended!");
 			window.location.href = "<?php echo($moodle_dir);?>/mod/streamline/view.php?id=<?php echo $id; ?>";  
 			
 		}

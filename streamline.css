@@ -189,3 +189,10 @@
 #chat {
 	border: 2px solid #42444C;
 }
+
+.session_no_record {
+	padding: 50px;
+	text-align: center;
+	font-size: 20px;
+	color: #42444C
+}
