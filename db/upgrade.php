@@ -289,6 +289,7 @@ function xmldb_streamline_upgrade($oldversion) {
         }
 		
 		//matts code
+		$table = new xmldb_table('streamline');
 		$field = new xmldb_field('meetingended', XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, null, null, 0, null);
 		  if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
