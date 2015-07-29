@@ -64,7 +64,6 @@
 		$meetingEnded = false;
 	}
 
-
 	?>
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -87,6 +86,9 @@
 		var recordingURL = "";
 
 		$( document ).ready(function() {
+		
+			//Adjust webinar buttons if required
+			adjustWebinarButtons();
 					
 			/* 	There are 3 screens which may be displayed for the user. There are 3 cases for each screen to be loaded as described below
 				CASE 1 - Meeting has not ended, there exists a recording and the user has the relevant permissions (admin, moderator, teacher)
@@ -169,6 +171,18 @@
 			1000);
 		});
 		
+		function adjustWebinarButtons() {
+			if(administrator || moderator || teacher) {
+				//Do nothing
+				$("#webinar_buttons").css("visibility","visible");
+			} else {
+				$(".leave_button").css("display", "none");	
+				$(".quiz_button").css("width", "50%");
+				$(".fullscreen_button").css("width", "50%");
+				$("#webinar_buttons").css("visibility","visible");
+			}
+		}
+		
 		function reSizeFlashClient(value) {
 			document.getElementById("flashclient").style.width = value;		
 			console.log("Setting Flash Client Width to: " + value);			
@@ -218,18 +232,23 @@
 		//added by Matt, ends the meeting completely
 		function exitMeeting(){
 			
-			var xmlHttp = new XMLHttpRequest();
-			xmlHttp.open( "GET", end_meeting_url, false );
-			xmlHttp.send( null );	
+			//Only end the session if the user has the correct permissions - I believe the check should be in the endmeeting.php
+			if(administrator || moderator || teacher) {
+
+				var xmlHttp = new XMLHttpRequest();
+				xmlHttp.open( "GET", end_meeting_url, false );
+				xmlHttp.send( null );	
+				
+				$.get('endmeeting.php?id=<?php echo $id; ?>', function(){
+					//successful ajax request
+				}).error(function(){
+					alert('error... ohh no!');
+				});
+				
+				alert("The webinar session has been ended!");
+				window.location.href = "<?php echo($moodle_dir);?>/mod/streamline/view.php?id=<?php echo $id; ?>";  
 			
-			$.get('endmeeting.php?id=<?php echo $id; ?>', function(){
-				//successful ajax request
-			}).error(function(){
-				alert('error... ohh no!');
-			});
-			
-			alert("The webinar session has been ended!");
-			window.location.href = "<?php echo($moodle_dir);?>/mod/streamline/view.php?id=<?php echo $id; ?>";  
+			}
 			
 		}
 		
