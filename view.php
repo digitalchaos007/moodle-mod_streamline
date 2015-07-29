@@ -235,7 +235,7 @@ if (!$streamline->timeavailable && $hasEnded == 0) {
     } else {
         //CALLING AFTER
         $bigbluebuttonbn_view = 'after';
-        echo $OUTPUT->heading(get_string('bbbfinished', 'streamline'));
+        //echo $OUTPUT->heading(get_string('bbbfinished', 'streamline'));
         echo $OUTPUT->box_start('generalbox boxaligncenter', 'dates');
 
         bigbluebuttonbn_view_after( $bbbsession );
@@ -270,7 +270,7 @@ if (!$streamline->timeavailable && $hasEnded == 0) {
 } else {
     //CALLING AFTER
     $bigbluebuttonbn_view = 'after';
-    echo $OUTPUT->heading(get_string('bbbfinished', 'streamline'));
+    //echo $OUTPUT->heading(get_string('bbbfinished', 'streamline'));
     echo $OUTPUT->box_start('generalbox boxaligncenter', 'dates');
 
     bigbluebuttonbn_view_after( $bbbsession );

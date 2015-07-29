@@ -308,9 +308,12 @@ function xmldb_streamline_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2012062709, 'streamline');
     }
 	
-
-
-
+	//TODO: A fix is required to add this field from within the if statement - Please remove the following code once the fix is made - Akshay & Matt
+	$table = new xmldb_table('streamline');
+	$field = new xmldb_field('meetingended', XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, null, null, 0, null);
+	  if (!$dbman->field_exists($table, $field)) {
+		$dbman->add_field($table, $field);
+	}
 
     /*
      * And that's all. Please, examine and understand the 3 example blocks above. Also
