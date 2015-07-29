@@ -45,7 +45,14 @@
 		$HStuList = null;
 		$StuList  = null;
 		$stuval   = bin2hex($USER->username);
-
+	
+	//Determine if user is the teacher
+	$teacher_role = user_has_role_assignment($USER->id,3);
+	if($teacher_role == 1) {
+		$teacher = true;
+	} else {
+		$teacher = false;
+	}
 
 	?>
 	
@@ -58,6 +65,8 @@
 		var meetingRunningUrl = <?php echo json_encode($meetingRunningUrl); ?>;
 		var moderator = <?php echo json_encode($moderator); ?>;
 		var administrator = <?php echo json_encode($administrator); ?>;
+		var teacher = <?php echo json_encode($teacher); ?>;
+
 		  
 		var sessionRunning = false;
 		var recordingURL = "";
@@ -66,13 +75,13 @@
 					
 			BBBSessionRunning();
 			var hasRecording = isRecording(); 
-			if(hasRecording && (administrator || moderator)) {
+			if(hasRecording && (administrator || moderator || teacher)) {
 				console.log("loading options screen");
 				$("#liveView").css("height", "0px");
 				$("#recordingView").css("display", "none");	
 				$("#optionView").css("visibility", "visible");
 				$("#top_liveView").css("display", "none");
-			} else if(sessionRunning || administrator || moderator) {
+			} else if(sessionRunning || administrator || moderator || teacher) {
 				console.log("loading live screen");
 				$("#liveView").css("height", "100%");
 				$("#recordingView").css("display", "none");
