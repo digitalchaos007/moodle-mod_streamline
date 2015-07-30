@@ -462,7 +462,7 @@ function bigbluebuttonbn_view_after( $bbbsession ){
 	$moodle_Dir = "streamline_view.php?id=".$id;
 	
 	include 'BBB.php';
-	
+	include 'Forums/Forum.php';
 }
 
 function bigbluebuttonbn_is_user_limit_reached( $bbbsession ){
