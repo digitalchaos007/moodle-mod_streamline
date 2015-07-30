@@ -44,7 +44,7 @@ M.mod_streamline.init_view = function(Y) {
 };
 
 M.mod_streamline.joinURL = function() {
-    window.location = streamline.joinurl;
+    //window.location = streamline.joinurl;
 };
 
 M.mod_streamline.viewend_CloseWindow = function() {

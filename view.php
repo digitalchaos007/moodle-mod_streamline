@@ -298,6 +298,14 @@ $jsmodule = array(
 $PAGE->requires->data_for_js('streamline', $jsVars);
 $PAGE->requires->js_init_call('M.mod_streamline.init_view', array(), false, $jsmodule);
 
+
+			
+$param = $bbbsession['joinURL'];
+echo '<iframe src="';
+echo htmlspecialchars($param);
+echo '" width="1000" height="1000">\n';
+echo "</iframe>";
+
 // Finish the page
 echo $OUTPUT->footer();
 

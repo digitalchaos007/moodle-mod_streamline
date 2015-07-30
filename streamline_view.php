@@ -83,7 +83,7 @@ $PAGE->set_heading(format_string($course->fullname));
  */
 
 // Output starts here.
-echo $OUTPUT->header();
+//echo $OUTPUT->header();
 
 // Conditions to show the intro can change to look for own settings or whatever.
 if ($streamline->welcome) {
@@ -115,7 +115,7 @@ echo $bbbsession;*/
 <div>
 <?php
 // Finish the page.
-echo $OUTPUT->footer();
+//echo $OUTPUT->footer();
 
 ?>
 
