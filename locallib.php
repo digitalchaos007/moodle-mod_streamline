@@ -134,7 +134,7 @@ function bigbluebuttonbn_getJoinURL( $meetingID, $userName, $PW, $SALT, $URL, $c
     global $DB, $CFG;
 	$url_join = $URL."api/join?";
 	$id = optional_param('id', 0, PARAM_INT); // course_module ID, or
-    $params = 'meetingID='.urlencode($meetingID).'&fullName='.urlencode($userName).'&password='.urlencode($PW) . '&redirect=true&clientURL=' . $CFG->wwwroot . '/mod/streamline/streamline_view.php?id=' . $id;
+    $params = 'meetingID='.urlencode($meetingID).'&fullName='.urlencode($userName).'&password='.urlencode($PW);
 	echo ' FROM LIB' . $id . 'FROM LIB';
     return ($url_join.$params.'&checksum='.sha1("join".$params.$SALT));
 	//$CFG->wwwroot 192.168.160.1/moodle/
