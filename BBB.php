@@ -451,12 +451,11 @@
 	
 	
 	$('.leave_button').click(function() {
-		BBBSessionRunning();
-		//alert(sessionRunning);
+		//var meetingEnded = <?php echo json_encode($meetingEnded); ?>;
 		//Add logout/leave javascript here
 		// Runs function created by Matt which ends the meeting and redirects to view.php
 		//look in endmeeting.php for more info on what this function does
-		if(sessionRunning == true) {
+		if(meetingEnded == false) {
 			var x;
 			if (confirm("Are you sure you want to end the meeting?") == true) {
 				exitMeeting();
@@ -466,7 +465,7 @@
 		
 		}
 		else{
-			alert("The session has either already ended or has just been created within the last 2 minutes. Please start a new session or wait 2 minutes for the meeting to be fully created.");
+			alert("The session has either already ended.");
 			
 		}
 
