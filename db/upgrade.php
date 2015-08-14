@@ -1,131 +1,166 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Upgrade logic.
+ * This file keeps track of upgrades to the streamline module
  *
- * @package   mod_streamline
- * @author    Fred Dixon  (ffdixon [at] blindsidenetworks [dt] com)
- * @author    Jesus Federico  (jesus [at] blindsidenetworks [dt] com)
- * @copyright 2010-2014 Blindside Networks Inc.
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v2 or later
+ * Sometimes, changes between versions involve alterations to database
+ * structures and other major things that may break installations. The upgrade
+ * function in this file will attempt to perform all the necessary actions to
+ * upgrade your older installation to the current version. If there's something
+ * it cannot do itself, it will tell you what you need to do.  The commands in
+ * here will all be database-neutral, using the functions defined in DLL libraries.
+ *
+ * @package    mod_streamline
+ * @copyright  2015 Your Name
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-function xmldb_streamline_upgrade($oldversion=0) {
+defined('MOODLE_INTERNAL') || die();
 
-    global $CFG, $THEME, $DB;
-    $dbman = $DB->get_manager(); // loads ddl manager and xmldb classes
-    
-    $result = true;
+/**
+ * Execute streamline upgrade from the given old version
+ *
+ * @param int $oldversion
+ * @return bool
+ */
+function xmldb_streamline_upgrade($oldversion) {
+    global $DB;
 
-    if ($result && $oldversion < 2012040200) {
-        // Define field intro to be droped from streamline
+    $dbman = $DB->get_manager(); // Loads ddl manager and xmldb classes.
+
+    /*
+     * And upgrade begins here. For each one, you'll need one
+     * block of code similar to the next one. Please, delete
+     * this comment lines once this file start handling proper
+     * upgrade code.
+     *
+     * if ($oldversion < YYYYMMDD00) { //New version in version.php
+     * }
+     *
+     * Lines below (this included)  MUST BE DELETED once you get the first version
+     * of your module ready to be installed. They are here only
+     * for demonstrative purposes and to show how the streamline
+     * iself has been upgraded.
+     *
+     * For each upgrade block, the file streamline/version.php
+     * needs to be updated . Such change allows Moodle to know
+     * that this file has to be processed.
+     *
+     * To know more about how to write correct DB upgrade scripts it's
+     * highly recommended to read information available at:
+     *   http://docs.moodle.org/en/Development:XMLDB_Documentation
+     * and to play with the XMLDB Editor (in the admin menu) and its
+     * PHP generation posibilities.
+     *
+     * First example, some fields were added to install.xml on 2007/04/01
+     */
+    if ($oldversion < 2007040100) {
+
+        // Define field course to be added to streamline.
         $table = new xmldb_table('streamline');
-        $field = new xmldb_field('intro', XMLDB_TYPE_TEXT, 'medium', null, null, null, null,'name');
+        $field = new xmldb_field('course', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'id');
 
-        // Drop field intro
-        if ($dbman->field_exists($table, $field)) {
-            $dbman->drop_field($table, $field, $continue=true, $feedback=true);
+        // Add field course.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
         }
 
-        // Define field introformat to be droped from streamline
+        // Define field intro to be added to streamline.
         $table = new xmldb_table('streamline');
-        $field = new xmldb_field('introformat', XMLDB_TYPE_INTEGER, '4', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'intro');
+        $field = new xmldb_field('intro', XMLDB_TYPE_TEXT, 'medium', null, null, null, null, 'name');
 
-        // Drop field introformat
-        if ($dbman->field_exists($table, $field)) {
-            $dbman->drop_field($table, $field, $continue=true, $feedback=true);
+        // Add field intro.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define field introformat to be added to streamline.
+        $table = new xmldb_table('streamline');
+        $field = new xmldb_field('introformat', XMLDB_TYPE_INTEGER, '4', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0',
+            'intro');
+
+        // Add field introformat.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
         }
 
         // Once we reach this point, we can store the new version and consider the module
-        // upgraded to the version 2012040200 so the next time this block is skipped
-        upgrade_mod_savepoint(true, 2012040200, 'streamline');
-    }
-    
-    if ($result && $oldversion < 2012062705) {
-
-        // Define table streamline_log to be created
-        $table = new xmldb_table('streamline_log');
-
-        // Adding fields to table streamline_log
-        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $table->add_field('meetingid', XMLDB_TYPE_CHAR, '256', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null);
-        $table->add_field('streamlineid', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null);
-        $table->add_field('record', XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null);
-        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0');
-        $table->add_field('event', XMLDB_TYPE_CHAR, '32', null, XMLDB_NOTNULL, null, null);
-
-        // Adding keys to table streamline_log
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
-
-        // Conditionally launch create table for streamline_log
-        if (!$dbman->table_exists($table)) {
-            $dbman->create_table($table);
-        }
-
-        // streamline savepoint reached
-        upgrade_mod_savepoint(true, 2012062705, 'streamline');
+        // ... upgraded to the version 2007040100 so the next time this block is skipped.
+        upgrade_mod_savepoint(true, 2007040100, 'streamline');
     }
 
-    if ($result && $oldversion < 2012100100) {
+    // Second example, some hours later, the same day 2007/04/01
+    // ... two more fields and one index were added to install.xml (note the micro increment
+    // ... "01" in the last two digits of the version).
+    if ($oldversion < 2007040101) {
 
+        // Define field timecreated to be added to streamline.
         $table = new xmldb_table('streamline');
-        $field = new xmldb_field('welcome');
-        $field->set_attributes(XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null, null, null, 'type');
+        $field = new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0',
+            'introformat');
 
-        $dbman->change_field_type($table, $field, $continue=true, $feedback=true);
-
-        upgrade_mod_savepoint(true, 2012100100, 'streamline');
-    }
-
-    if ($result && $oldversion < 2014050100) {
-
-        $table = new xmldb_table('streamline');
-        $field = new xmldb_field('allmoderators');
-        $field->set_attributes(XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, 0);
-
+        // Add field timecreated.
         if (!$dbman->field_exists($table, $field)) {
-            $dbman->add_field($table, $field, $continue=true, $feedback=true);
+            $dbman->add_field($table, $field);
         }
 
-        upgrade_mod_savepoint(true, 2014050100, 'streamline');
-    }
-
-    if ($result && $oldversion < 2014070420) {
-
+        // Define field timemodified to be added to streamline.
         $table = new xmldb_table('streamline');
-        $field = new xmldb_field('participants', XMLDB_TYPE_TEXT, 'medium', null, null, null, null);
+        $field = new xmldb_field('timemodified', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0',
+            'timecreated');
 
+        // Add field timemodified.
         if (!$dbman->field_exists($table, $field)) {
-            $dbman->add_field($table, $field, $continue=true, $feedback=true);
+            $dbman->add_field($table, $field);
         }
 
-        upgrade_mod_savepoint(true, 2014070420, 'streamline');
-    }
-
-    if ($result && $oldversion < 2014101004) {
-
+        // Define index course (not unique) to be added to streamline.
         $table = new xmldb_table('streamline');
-        $field = new xmldb_field('participants');
-        $field->set_attributes(XMLDB_TYPE_TEXT, 'medium', null, null, null, null);
+        $index = new xmldb_index('courseindex', XMLDB_INDEX_NOTUNIQUE, array('course'));
 
-        $dbman->change_field_type($table, $field, $continue=true, $feedback=true);
-
-        upgrade_mod_savepoint(true, 2014101004, 'streamline');
-    }
-
-    if ($result && $oldversion < 2015062100) {
-
-        $table = new xmldb_table('streamline');
-        $field = new xmldb_field('userlimit');
-        $field->set_attributes(XMLDB_TYPE_INTEGER, '3', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, 0);
-
-        if (!$dbman->field_exists($table, $field)) {
-            $dbman->add_field($table, $field, $continue=true, $feedback=true);
+        // Add index to course field.
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
         }
 
-        upgrade_mod_savepoint(true, 2015062100, 'streamline');
+        // Another save point reached.
+        upgrade_mod_savepoint(true, 2007040101, 'streamline');
     }
 
-    return $result;
+    // Third example, the next day, 2007/04/02 (with the trailing 00),
+    // some actions were performed to install.php related with the module.
+    if ($oldversion < 2007040200) {
+
+        // Insert code here to perform some actions (same as in install.php).
+
+        upgrade_mod_savepoint(true, 2007040200, 'streamline');
+    }
+
+    /*
+     * And that's all. Please, examine and understand the 3 example blocks above. Also
+     * it's interesting to look how other modules are using this script. Remember that
+     * the basic idea is to have "blocks" of code (each one being executed only once,
+     * when the module version (version.php) is updated.
+     *
+     * Lines above (this included) MUST BE DELETED once you get the first version of
+     * yout module working. Each time you need to modify something in the module (DB
+     * related, you'll raise the version and add one upgrade block here.
+     *
+     * Finally, return of upgrade result (true, all went good) to Moodle.
+     */
+    return true;
 }

@@ -1,3 +1,0 @@
-http://demo.bigbluebutton.org/demo/create.jsp
-
-https://code.google.com/p/swfobject/wiki/api
