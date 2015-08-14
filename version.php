@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die();
 $plugin->component = 'mod_streamline';
 $plugin->version = 1;
 $plugin->release = 'v0.1';
-$plugin->requires = 2013111805;
+$plugin->requires = 2014051200;
 $plugin->maturity = MATURITY_ALPHA;
 $plugin->cron = 0;
 $plugin->dependencies = array();
