@@ -73,7 +73,7 @@ echo $OUTPUT->header();
 
 // Conditions to show the intro can change to look for own settings or whatever.
 if ($streamline->welcome) {
-    //echo $OUTPUT->box(format_module_intro('streamline', $streamline, $cm->id), 'generalbox mod_introbox', 'streamlineintro');
+    echo $OUTPUT->box(format_module_intro('streamline', $streamline, $cm->id), 'generalbox mod_introbox', 'streamlineintro');
 }
 
 /* Example of how to call salt key
