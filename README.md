@@ -8,7 +8,7 @@ Where 'username' is your git username.
 \* Note: the module has been setup for the 'streamline' name and will not work if changed.
 
 Next, add the repo you forked from as a remote so you can easily pull updates from it:
-* git remote -add name https://github.com/Stream-Line/moodle-mod_streamline.git <br>
+* git remote add name https://github.com/Stream-Line/moodle-mod_streamline.git <br>
 Where 'name' is the name you want to refer to the remote by, e.g. parent.
 
 \* Note: by defaut, 'origin' is the repository you cloned from.
