@@ -1,22 +1,36 @@
 # Streamline Setup
 This is the main repo for our activity module.
 
-Firstly, fork this repo into your own account. Then to install it on 
-your moodle server, navigate to moodle/mod/ and run:
+Firstly, fork this repo into your own account. Then to install it on your moodle server, navigate to moodle/mod/ and run:
 * git clone https://github.com/username/moodle-mod_streamline.git streamline <br>
-Where username is your git username.
-* Note the module has been setup for the 'streamline' name and will not work if changed.
+Where 'username' is your git username.
+
+\* Note: the module has been setup for the 'streamline' name and will not work if changed.
+
+Next, add the repo you forked from as a remote so you can easily pull updates from it:
+* git remote -add name https://github.com/Stream-Line/moodle-mod_streamline.git <br>
+Where 'name' is the name you want to refer to the remote by, e.g. parent.
+
+\* Note: by defaut, 'origin' is the repository you cloned from.
 
 Finally, make a new branch for your development:
 * git checkout -b branchName <br>
-Where branchName is whatever you want it to be. Try to be specific, don't
-just put test1 or something.
+Where 'branchName' is whatever you want it to be. Try to be specific, don't just put test1 or something.
 
-Once your module is in a stable, working condition, submit a pull request.
-Once someone else has reviewed your module, it will be pulled into the main
-repo. Only once you have completed your module, should you attempt to merge 
-your branch with the master. Once successful, you should go through the same
-pull request process.
+To push your changes to your git repo use:
+* git push -u origin branchName <br>
+Where 'branchName' is your development branch. If you don't specify a branch, the master branch is pushed by default.
+
+Once you have finished your module, you need to merge it into the master branch. To do this you need to:
+* Checkout to the master branch and pull and any changes others may have commited.
+* Merge the master branch with your branch by using:
+  * git merge branchName <br>
+Where 'branchName' is your development branch. This command merges 'branchName' into the current working branch, which should be master.
+* Once your merge is successfull, push the changes to your git repo. 
+* Navigate to your GitHub repository in your web browser and click on 'Pull Requests', which is located in the tabs on the right hand side.
+* Click 'New pull request'.
+  * By default, the base fork should be set to the Stream-Line repo and its master branch, while the head fork should be set to your repo and its master branch.
+* Assuming you have merged your changes earlier correctly, you should now be able to click 'Create pull request'.
 
 =====================================================================
 # Original Setup Readme
