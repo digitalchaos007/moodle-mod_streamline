@@ -39,7 +39,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// Replace streamline with the name of your module and remove this line.
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
@@ -71,33 +70,14 @@ $event->trigger();
 
 // Print the page header.
 
-$PAGE->set_url('/mod/streamline/view.php', array('id' => $cm->id));
+$PAGE->set_url('/mod/streamline/streamline_view.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($streamline->name));
 $PAGE->set_heading(format_string($course->fullname));
-
-/*
- * Other things you may want to set - remove if not needed.
- * $PAGE->set_cacheable(false);
- * $PAGE->set_focuscontrol('some-html-id');
- * $PAGE->add_body_class('streamline-'.$somevar);
- */
 
 // Output starts here.
 echo $OUTPUT->header();
 
-// Conditions to show the intro can change to look for own settings or whatever.
-if ($streamline->welcome) {
-    //echo $OUTPUT->box(format_module_intro('streamline', $streamline, $cm->id), 'generalbox mod_introbox', 'streamlineintro');
-}
 
-/* Example of how to call salt key
-$bbbsession = trim($CFG -> BigBlueButtonSaltKey);
-echo $bbbsession;*/
-
-// Replace the following lines with you own code.
-//echo $OUTPUT->heading('Yay! It works!');
-
-//
 ?>
 <div class="units-row">
 
@@ -115,7 +95,10 @@ echo $bbbsession;*/
 	</div>
 	<div>
 <div>
+
+
 <?php
+
 // Finish the page.
 echo $OUTPUT->footer();
 
