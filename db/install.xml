@@ -82,10 +82,6 @@
         <KEY NAME="lectnumber" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-<<<<<<< HEAD
-=======
-
->>>>>>> ea85ce0fac62ef639aca788857e661e205f22138
     <TABLE NAME="streamline_log" COMMENT="The streamline table to store meeting activity events" PREVIOUS="streamline">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="meetingid"/>
