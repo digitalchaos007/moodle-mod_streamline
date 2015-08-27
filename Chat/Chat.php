@@ -1,10 +1,3 @@
-<?php	$HStuList = null;
-	$StuList  = null;
-	$stuval   = bin2hex($USER->username);	
-	include 'Chat/DataPrep.php';
-	include 'Chat/StartChat.php';
-?>
-
 <html>
 
 <head>

@@ -6,7 +6,11 @@
 	
 		
 	global $DB, $CFG, $USER, $COURSE;
-
+	$HStuList = null;
+	$StuList  = null;
+	$stuval   = bin2hex($USER->username);	
+	include 'Chat/DataPrep.php';
+	include 'Chat/StartChat.php';
 	
 	$bbbsession['salt'] = trim($CFG->BigBlueButtonSaltKey);
 	$bbbsession['url'] = trim(trim($CFG->ServerURLforBigBlueButton),'/').'/';
