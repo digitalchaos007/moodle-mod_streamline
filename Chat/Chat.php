@@ -44,7 +44,8 @@
 
 	function StrContains(val, arr){
 	   for(var x in arr){
-		if(val.contains(arr[x])){
+		
+		if(val.indexOf(arr[x])!= -1){
 		    return true;
 		}
 	    }
