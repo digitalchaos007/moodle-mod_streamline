@@ -63,7 +63,8 @@
 	});
 
 	socket.on('messback', function(message){
-		$('#chat').append(message);
+	    var mes = HyperLinks(message);
+		$('#chat').append(mes);
 $("#chat").animate({ scrollTop: 10000000 }, "slow");
 	});
 
