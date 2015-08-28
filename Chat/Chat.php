@@ -70,8 +70,8 @@ $("#chat").animate({ scrollTop: 10000000 }, "slow");
 	});
 
 	socket.on('loaded', function(history){
-		var mes = HyperLinks(history);
-		$('#chat').append(mes);
+		//var mes = HyperLinks(history);
+		$('#chat').append(history);
 $("#chat").animate({ scrollTop: 10000000 }, "fast");
 	});
 
