@@ -26,6 +26,33 @@
 		socket.emit('loadF',<?=json_encode($stuval)?>,id);
 	}
 
+// hyperlink feature --
+	function HyperLinks(msg){
+	    var r = msg.split(" ");
+	    var whiteList = ["http","https","www"];
+
+	    for(var x in r){
+	      if( StrContains(r[x],whiteList) == true){
+	        var link = r[x].link(r[x]);
+	        r[x] = link;
+	      }	
+	    }
+	r = r.join(" ");
+    	return r;
+    }
+
+
+	function StrContains(val, arr){
+	   for(var x in arr){
+		if(val.contains(arr[x])){
+		    return true;
+		}
+	    }
+	    return false;
+	}
+
+// End of hyperlink feature --
+
 	$(function() { $("#sendie").keydown(
 		function(event) {  
 			if(event.keyCode == 13 ){
