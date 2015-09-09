@@ -22,7 +22,7 @@
  * @copyright 2015 Your Name
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-require_once(dirname(dirname(dirname(__FILE__))).'/config.php');	
+require_once(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php');	
 	global $DB, $CFG;
 	$id = optional_param('id', 0, PARAM_INT); // course_module ID, or
 	$b  = optional_param('n', 0, PARAM_INT);  // streamline instance ID

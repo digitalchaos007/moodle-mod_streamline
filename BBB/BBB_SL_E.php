@@ -1,5 +1,6 @@
 <script>
 	function toggleFullScreen(elem) {
+	
 		if ((document.fullScreenElement !== undefined && document.fullScreenElement === null) || (document.msFullscreenElement !== undefined && document.msFullscreenElement === null) || (document.mozFullScreen !== undefined && !document.mozFullScreen) || (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)) {
 			console.log("Setting to fullscreen mode");
 			elem.style.width = '75%';
@@ -13,6 +14,11 @@
 			} else if (elem.msRequestFullscreen) {
 				elem.msRequestFullscreen();
 			}
+			else
+			{
+				alert("wtf");
+			}
+			
 			switchLayout('StreamLine Lecture');
 		} else {		
 			console.log("Setting to normal mode");
@@ -42,15 +48,34 @@
 	
 	
 	$('.leave_button').click(function() {
+	
 		//Add logout/leave javascript here
 		// Runs function created by Matt which ends the meeting and redirects to view.php
 		//look in endmeeting.php for more info on what this function does
-		exitMeeting();
+		if(meetingEnded == false) {
+			var x;
+			if (confirm("Are you sure you want to end the meeting?") == true) {
+				exitMeeting();
+			}
+		
+		}
+		else{
+			alert("The session has already ended.");
+			
+		}
 	});
 	$('.quiz_button').click(function() {
 		//Add quiz javascript here
 	});
 	$('.fullscreen_button').click(function() {
 		toggleFullScreen(document.getElementById('middleContainer'));
+		
+		
 	});
+	
+	
+	
+
+	
   </script>
+  

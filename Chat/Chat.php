@@ -1,4 +1,7 @@
-<?php	$HStuList = null;
+<?php	
+
+	global $CFG, $DB, $OUTPUT, $HStuList, $StuList, $course, $USER;
+	$HStuList = null;
 	$StuList  = null;
 	$stuval   = bin2hex($USER->username);	
 	include 'Chat/DataPrep.php';

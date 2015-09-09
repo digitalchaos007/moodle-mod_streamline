@@ -167,16 +167,18 @@
 				var xmlHttp = new XMLHttpRequest();
 				xmlHttp.open( "GET", end_meeting_url, false );
 				xmlHttp.send( null );	
-				
-				$.get('endmeeting.php?id=<?php echo $id; ?>', function(){
+				$.get('BBB/endmeeting.php?id=<?php echo $id; ?>', function(){
 					//successful ajax request
 				}).error(function(){
 					alert('error... ohh no!');
 				});
 				
 				alert("The webinar session has been ended!");
-				window.location.href = "<?php echo($moodle_dir);?>/mod/streamline/view.php?id=<?php echo $id; ?>";  
-			
+				//window.location.href = "<?php echo($moodle_dir);?>/mod/streamline/view.php?id=<?php echo $id; ?>";  
+				
+				//Closes the iframe
+				//$('#iframe_box').remove();
+				
 			}
 			
 		}
@@ -208,6 +210,7 @@
 		
 		var sessionRecording = false;
 		function BBBRecordRequest() {
+
 			if(sessionRecording) {
 				$("#recordStatus").removeClass("recordStatus_On");
 				$("#recordStatus").addClass("recordStatus_Off");
@@ -251,7 +254,7 @@
     <script type="text/javascript" src="<?php Print($moodle_dir);?>/mod/streamline/3rd-party.js"></script>
   
     <script>
-      window.chatLinkClicked = function(url) {
+      /*window.chatLinkClicked = function(url) {
         window.open(url, '_blank');
         window.focus();
       }
@@ -268,7 +271,7 @@
       }
       window.onload = function() {
          registerListeners();
-      }
+      }*/
 	  //window.location.href="<?php Print($variable); ?>bigbluebutton/api/create?meetingID=test-105&checksum=6de5d773b1768d17f30765e606f1869561e2cce0";
 	  
 	  
