@@ -20,7 +20,7 @@ M.mod_streamline.init_view = function(Y) {
         } else {
 
             var dataSource = new Y.DataSource.Get({
-                source : M.cfg.wwwroot + "/mod/streamline/ping.php?"
+                source : M.cfg.wwwroot + "/mod/streamline/BBB/ping.php?"
             });
 
             var request = {
