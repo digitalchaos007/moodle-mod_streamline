@@ -1,13 +1,3 @@
-<?php	
-
-	global $CFG, $DB, $OUTPUT, $HStuList, $StuList, $course, $USER;
-	$HStuList = null;
-	$StuList  = null;
-	$stuval   = bin2hex($USER->username);	
-	include 'Chat/DataPrep.php';
-	include 'Chat/StartChat.php';
-?>
-
 <html>
 
 <head>
@@ -36,6 +26,34 @@
 		socket.emit('loadF',<?=json_encode($stuval)?>,id);
 	}
 
+// hyperlink feature --
+	function HyperLinks(msg){
+	    var r = msg.split(" ");
+	    var whiteList = ["http","https","www"];
+
+	    for(var x in r){
+	      if( StrContains(r[x],whiteList) == true){
+	        var link = r[x].link(r[x]);
+	        r[x] = link;
+	      }	
+	    }
+	r = r.join(" ");
+    	return r;
+    }
+
+
+	function StrContains(val, arr){
+	   for(var x in arr){
+		
+		if(val.indexOf(arr[x])!= -1){
+		    return true;
+		}
+	    }
+	    return false;
+	}
+
+// End of hyperlink feature --
+
 	$(function() { $("#sendie").keydown(
 		function(event) {  
 			if(event.keyCode == 13 ){
@@ -46,11 +64,13 @@
 	});
 
 	socket.on('messback', function(message){
-		$('#chat').append(message);
+	    var mes = HyperLinks(message);
+		$('#chat').append(mes);
 $("#chat").animate({ scrollTop: 10000000 }, "slow");
 	});
 
 	socket.on('loaded', function(history){
+		//var mes = HyperLinks(history);
 		$('#chat').append(history);
 $("#chat").animate({ scrollTop: 10000000 }, "fast");
 	});
