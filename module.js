@@ -20,7 +20,7 @@ M.mod_streamline.init_view = function(Y) {
         } else {
 
             var dataSource = new Y.DataSource.Get({
-                source : M.cfg.wwwroot + "/mod/streamline/ping.php?"
+                source : M.cfg.wwwroot + "/mod/streamline/BBB/ping.php?"
             });
 
             var request = {
@@ -44,7 +44,9 @@ M.mod_streamline.init_view = function(Y) {
 };
 
 M.mod_streamline.joinURL = function() {
+	
     window.location = streamline.joinurl;
+	
 };
 
 M.mod_streamline.viewend_CloseWindow = function() {

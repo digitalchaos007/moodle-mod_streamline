@@ -1,17 +1,3 @@
-<html>
-
-<head>
-   
-    <link rel="stylesheet" href="css/kube.min.css" />
-    <link rel="stylesheet" href="css/your-styles.css" />
- 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
-    <script src="js/kube.min.js"></script>
-	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-</head>
-</html>
-
 <?php
 // This file is part of Moodle - http://moodle.org/
 //
@@ -44,6 +30,7 @@
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
 
+Global $PAGE;
 $id = optional_param('id', 0, PARAM_INT); // Course_module ID, or
 $n  = optional_param('n', 0, PARAM_INT);  // ... streamline instance ID - it should be named as the first character of the module.
 
@@ -60,7 +47,7 @@ if ($id) {
 }
 
 require_login($course, true, $cm);
-
+/*
 $event = \mod_streamline\event\course_module_viewed::create(array(
     'objectid' => $PAGE->cm->instance,
     'context' => $PAGE->context,
@@ -68,7 +55,7 @@ $event = \mod_streamline\event\course_module_viewed::create(array(
 $event->add_record_snapshot('course', $PAGE->course);
 $event->add_record_snapshot($PAGE->cm->modname, $streamline);
 $event->trigger();
-
+*/
 // Print the page header.
 
 $PAGE->set_url('/mod/streamline/view.php', array('id' => $cm->id));
@@ -85,40 +72,9 @@ $PAGE->set_heading(format_string($course->fullname));
 // Output starts here.
 echo $OUTPUT->header();
 
-// Conditions to show the intro can change to look for own settings or whatever.
-if ($streamline->welcome) {
-    //echo $OUTPUT->box(format_module_intro('streamline', $streamline, $cm->id), 'generalbox mod_introbox', 'streamlineintro');
-}
+include "streamline_modules.html";
 
-/* Example of how to call salt key
-$bbbsession = trim($CFG -> BigBlueButtonSaltKey);
-echo $bbbsession;*/
-
-// Replace the following lines with you own code.
-//echo $OUTPUT->heading('Yay! It works!');
-
-//
-?>
-<div class="units-row">
-
-	<div class="backG">
-		<?php include 'BBB.php';?>
-	</div>
-
-
-</div>
-</br>
-<div class="units-row">
-	<div class="backG">
-	<div class="unit-100">
-		<?php include 'Forums/Forum.php';?>
-	</div>
-	<div>
-<div>
-<?php
 // Finish the page.
 echo $OUTPUT->footer();
 
 ?>
-
-

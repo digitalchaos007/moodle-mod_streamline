@@ -43,7 +43,7 @@ function bigbluebuttonbn_log(array $bbbsession, $event) {
 
 
 /////////////////////////////
-// Matts custom functions  //
+// Matt's custom functions  //
 ////////////////////////////
 
 function end_meeting() {
@@ -135,9 +135,7 @@ function bigbluebuttonbn_getJoinURL( $meetingID, $userName, $PW, $SALT, $URL, $c
 	$url_join = $URL."api/join?";
 	$id = optional_param('id', 0, PARAM_INT); // course_module ID, or
     $params = 'meetingID='.urlencode($meetingID).'&fullName='.urlencode($userName).'&password='.urlencode($PW) . '&redirect=true&clientURL=' . $CFG->wwwroot . '/mod/streamline/streamline_view.php?id=' . $id;
-	echo ' FROM LIB' . $id . 'FROM LIB';
     return ($url_join.$params.'&checksum='.sha1("join".$params.$SALT));
-	//$CFG->wwwroot 192.168.160.1/moodle/
 }
 
 function bigbluebuttonbn_getCreateMeetingURL($name, $meetingID, $attendeePW, $moderatorPW, $welcome, $logoutURL, $SALT, $URL, $record = 'false', $duration=0, $voiceBridge=0, $metadata = array() ) {
