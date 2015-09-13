@@ -2,19 +2,19 @@
 // 5 chat include line that have to be placed before the connection 
 // occure to load the client this is because, the client appear to 
 // cause some socket conflicts. 
- global $DB, $CFG, $USER, $COURSE;
-  $HStuList = null;
- $StuList  = null;
- $stuval   = bin2hex($USER->username); 
- include 'Chat/DataPrep.php';
- include 'Chat/StartChat.php';
+	global $DB, $CFG, $USER, $COURSE;
+ 	$HStuList = null;
+	$StuList  = null;
+	$stuval   = bin2hex($USER->username);	
+	include 'Chat/DataPrep.php';
+	include 'Chat/StartChat.php';
 
 ?>
 
 <script type="text/javascript" src="<?php Print($moodle_dir);?>/mod/streamline/3rd-party.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="Quiz/xml2json.min.js"></script>
-		
+
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
@@ -28,8 +28,7 @@
 <link rel="stylesheet" type="text/css" href="Quiz/quiz.css">
 
 <body>
-	  
-	<div id ="top_liveView">
+<div id ="top_liveView">
 		<div id="recordStatus" class="recordStatus_Off"> This Lecture is not being recorded </div>
 	</div>
 	<div class="units-row units-split">
@@ -68,6 +67,7 @@
 				
 			</div>
 			
+			
 			<div id="recordingView">
 				<div id="sectionContainer"></div>
 				<iframe id='streamline_recording' width='100%' height='100%' frameborder='0' scrolling='no' marginheight='0' marginwidth='0'></iframe>
@@ -79,7 +79,7 @@
 		</div>
 		<div  class="unit-25" id="rightContainer">
 			<div id="webinar_buttons">
-				<div id="std_button" class="fullscreen_button" title="Full screen">
+				<div id="std_button" class="fullscreen_button">
 					<img src="./images/fullscreen_button.png" style='width: 100%; object-fit: contain; visibility:hidden' />
 				</div>
 				<div id="std_button" class="quiz_button" class="dropdown" id="dropdownMenu1" title="Quiz">
@@ -89,7 +89,7 @@
 				  <ul id="quiz_menu" class="dropdown-menu" aria-labelledby="dropdownMenu1">
 				  </ul>
 				</div>
-				<div id="std_button" class="leave_button" title="Exit">
+				<div id="std_button" class="leave_button">
 					<img src="./images/fullscreen_button.png" style='width: 100%; object-fit: contain; visibility:hidden' />
 				</div>
 			</div>
@@ -111,4 +111,4 @@
 	
 	<?php include 'Quiz/quiz.php';?>
 
-	</body>
+</body>
