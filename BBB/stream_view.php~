@@ -449,7 +449,7 @@ function bigbluebuttonbn_view_after( $bbbsession ){
 	$cm = get_coursemodule_from_id('streamline', $id, 0, false, MUST_EXIST);
 	$streamline = $DB->get_record('streamline', array('id' => $cm->instance), '*', MUST_EXIST);
 	
-	include "streamline_modules.php";
+	include "streamline_modules.html";
     $recordingsArray = bigbluebuttonbn_getRecordingsArray($bbbsession['meetingid'], $bbbsession['url'], $bbbsession['salt']);
 	if($streamline -> meetingended == 0)
 	{
