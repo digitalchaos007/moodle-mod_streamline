@@ -134,7 +134,7 @@
 	box-sizing:border-box; 
 	width: 100%;
 	padding-left: 1%;
-	overflow:auto;
+	overflow:visible;
 	visibility: hidden;
 }
 
@@ -155,7 +155,16 @@
     background:url(./images/quiz_button.png) no-repeat;
 	background-size: 100%;
 	height: 65vw;
+	overflow: visible;
+	position: relative;
 }	
+
+#dropdownMenu1 {
+    background:url(./images/quiz_button.png) no-repeat;
+	background-size: 100%;
+	width: 100%;
+	padding:0px;
+}
 
 .leave_button {
     background:url(./images/leave_button.png) no-repeat;
@@ -179,6 +188,11 @@
     background:url(./images/leave_button_down.png) no-repeat;
 	background-size: 100%;
 	height: 65vw;
+}
+
+#dropdownMenu1:hover {
+    background:url(./images/quiz_button_down.png) no-repeat;
+	background-size: 100%;
 }
 
 #chat_module {

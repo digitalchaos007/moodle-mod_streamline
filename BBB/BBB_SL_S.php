@@ -243,7 +243,6 @@
       swfobject.registerObject("WebcamPreviewStandalone", "11", "expressInstall.swf");
       swfobject.registerObject("WebcamViewStandalone", "11", "expressInstall.swf");
     </script>
-    <script src="<?php Print($variable);?>/client/lib/jquery-1.5.1.min.js" language="javascript"></script>
     <script src="<?php Print($variable);?>/client/lib/bigbluebutton.js" language="javascript"></script>
     <script src="<?php Print($variable);?>client/lib/bbb_localization.js" language="javascript"></script>
     <script src="<?php Print($variable);?>client/lib/bbb_blinker.js" language="javascript"></script>

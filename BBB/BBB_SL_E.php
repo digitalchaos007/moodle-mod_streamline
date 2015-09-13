@@ -3,8 +3,8 @@
 	
 		if ((document.fullScreenElement !== undefined && document.fullScreenElement === null) || (document.msFullscreenElement !== undefined && document.msFullscreenElement === null) || (document.mozFullScreen !== undefined && !document.mozFullScreen) || (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)) {
 			console.log("Setting to fullscreen mode");
-			elem.style.width = '75%';
-			elem.style.height = '650px';
+			elem.style.width = '100%';
+			elem.style.height = '100%';
 			if (elem.requestFullScreen) {
 				elem.requestFullScreen();
 			} else if (elem.mozRequestFullScreen) {
