@@ -1,3 +1,15 @@
+<?php 
+// 5 chat include line that have to be placed before the connection 
+// occure to load the client this is because, the client appear to 
+// cause some socket conflicts. 
+	global $DB, $CFG, $USER, $COURSE;
+ 	$HStuList = null;
+	$StuList  = null;
+	$stuval   = bin2hex($USER->username);	
+	include 'Chat/DataPrep.php';
+	include 'Chat/StartChat.php';
+
+?>
 
 <script type="text/javascript" src="<?php Print($moodle_dir);?>/mod/streamline/3rd-party.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

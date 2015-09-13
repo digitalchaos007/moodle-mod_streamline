@@ -72,7 +72,7 @@ $PAGE->set_heading(format_string($course->fullname));
 // Output starts here.
 echo $OUTPUT->header();
 
-include "streamline_modules.html";
+include "streamline_modules.php";
 
 // Finish the page.
 echo $OUTPUT->footer();

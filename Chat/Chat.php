@@ -1,3 +1,4 @@
+
 <html>
 
 <head>
@@ -14,66 +15,78 @@
 
   <script type="text/javascript">	
 
-			$(document).ready(function() {
-				$("#chat").animate({ scrollTop: $('#scroll_down').height() }, "fast");
-				return false;
-			});
+	$(document).ready(function() {
+		$("#chat").animate({ scrollTop: $('#scroll_down').height() }, "fast");
+		return false;
+	});
 
 	var id = <?=json_encode($cm->id)?>;
 
 	function loading(){
-		socket.emit('load',<?=json_encode($stuval)?>,id);
-		socket.emit('loadF',<?=json_encode($stuval)?>,id);
+		socket.emit('Load',<?=json_encode($stuval)?>,id);
+		socket.emit('LoadF',<?=json_encode($stuval)?>,id);
 	}
 
-// hyperlink feature --
 	function HyperLinks(msg){
-	    var r = msg.split(" ");
-	    var whiteList = ["http","https","www"];
+    var r = msg.split(" ");
+    var whiteList = ["http","https","www"];
 
-	    for(var x in r){
-	      if( StrContains(r[x],whiteList) == true){
-	        var link = r[x].link(r[x]);
-	        r[x] = link;
-	      }	
-	    }
-	r = r.join(" ");
-    	return r;
+    for(var x in r){
+      if( StrContains(r[x],whiteList) == true){
+        var link = r[x].link(r[x]);
+        r[x] = link;
+      }
     }
-
+    r = r.join(" ");
+    return r;
+	}
 
 	function StrContains(val, arr){
 	   for(var x in arr){
-		
-		if(val.indexOf(arr[x])!= -1){
+		if(val.includes(arr[x])){
 		    return true;
 		}
 	    }
 	    return false;
 	}
 
-// End of hyperlink feature --
+	//http://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-an-url
+	function ValidURL(str) {
+	  var pattern = new RegExp('^(https?:\/\/)?'+ // protocol
+	    '((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|'+ // domain name
+	    '((\d{1,3}\.){3}\d{1,3}))'+ // OR ip (v4) address
+	    '(\:\d+)?(\/[-a-z\d%_.~+]*)*'+ // port and path
+	    '(\?[;&a-z\d%_.~+=-]*)?'+ // query string
+	    '(\#[-a-z\d_]*)?$','i'); // fragment locater
+	  if(!pattern.test(str)) {
+	    return false;
+	  } else {
+	    return true;
+	  }
+	}
 
 	$(function() { $("#sendie").keydown(
 		function(event) {  
 			if(event.keyCode == 13 ){
-				socket.emit('message',$('#sendie').val(),id,<?=json_encode($stuval)?>,sid);
+				socket.emit('Message',$('#sendie').val(),id,<?=json_encode($stuval)?>,sid);
 				$('#sendie').val("");
 			}
 		}); 
 	});
 
 	socket.on('messback', function(message){
-	    var mes = HyperLinks(message);
-		$('#chat').append(mes);
-$("#chat").animate({ scrollTop: 10000000 }, "slow");
+	    $('#chat').append(HyperLinks(message)); 
+	    $("#chat").animate({ scrollTop: 10000000 }, "slow");
 	});
 
 	socket.on('loaded', function(history){
-		//var mes = HyperLinks(history);
 		$('#chat').append(history);
 $("#chat").animate({ scrollTop: 10000000 }, "fast");
 	});
+
+	//socket.on('connect', function(){
+	//	$('#chat').append("G2G");
+	//});
 
 	window.onbeforeunload = function(e) {
 		socket.emit('disconnect',id,<?=json_encode($stuval)?>,sid);
