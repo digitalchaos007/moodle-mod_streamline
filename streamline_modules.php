@@ -79,17 +79,17 @@
 		</div>
 		<div  class="unit-25" id="rightContainer">
 			<div id="webinar_buttons">
-				<div id="std_button" class="fullscreen_button">
+				<div id="std_button" class="fullscreen_button" title="Full screen">
 					<img src="./images/fullscreen_button.png" style='width: 100%; object-fit: contain; visibility:hidden' />
 				</div>
-				<div id="std_button" class="quiz_button" class="dropdown" id="dropdownMenu1">
+				<div id="std_button" class="quiz_button" class="dropdown" id="dropdownMenu1" title="Quiz">
 				  <div class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 					<img src="./images/fullscreen_button.png" style='width: 100%; object-fit: contain; visibility:hidden' />
 				  </div>
 				  <ul id="quiz_menu" class="dropdown-menu" aria-labelledby="dropdownMenu1">
 				  </ul>
 				</div>
-				<div id="std_button" class="leave_button">
+				<div id="std_button" class="leave_button" title="Exit">
 					<img src="./images/fullscreen_button.png" style='width: 100%; object-fit: contain; visibility:hidden' />
 				</div>
 			</div>

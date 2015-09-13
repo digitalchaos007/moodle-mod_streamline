@@ -12,11 +12,13 @@
 .quizOption {
 	line-height: 25px;
 	padding-left: 20px;
+	color: #373a47;
 }
 
 .quizOption:hover {
-	background-color: #F0F0F0;
+	background-color: #373a47;
 	cursor: pointer;
+	color: #FFFFFF;
 }
 
 .modal-dialog {
