@@ -1,0 +1,29 @@
+#quizModal {
+	margin: 0px;
+	width: 60%;
+	left: 20%;
+	bottom: 10%;
+}
+
+.modal-footer {
+	background-color: #FFFFFF;
+}
+
+.quizOption {
+	line-height: 25px;
+	padding-left: 20px;
+}
+
+.quizOption:hover {
+	background-color: #F0F0F0;
+	cursor: pointer;
+}
+
+.modal-dialog {
+
+	margin: 0px;
+	padding-left: 10%;
+	padding-right: 10%;
+	width: 100%;
+
+}
