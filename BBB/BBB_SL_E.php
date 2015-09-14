@@ -23,7 +23,13 @@
 		} else {		
 			console.log("Setting to normal mode");
 			elem.style.width = '75%';
-			elem.style.height = '650px';
+			
+			var windowHeight = window.innerHeight;
+			var navHeight = $('.navbar').height()
+			containerHeight = windowHeight - navHeight;
+	
+			elem.style.height = containerHeight + 'px';
+			
 			if (document.cancelFullScreen) {
 				document.cancelFullScreen();
 			} else if (document.mozCancelFullScreen) {

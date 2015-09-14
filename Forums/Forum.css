@@ -1,12 +1,14 @@
-#sendie                         { border: 3px solid #999; width: 360px; padding: 10px; font: 12px "Lucida Grande", Sans-Serif;  }
+#forum_module  {
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	color: #FFFFFF;
+	background-color: #42444C;
+	text-align: center;
+	border-radius: 5px;
+	font-size: 100%;
+}
 
-
-#chat-area                      { height: 300px; overflow-y:scroll; background: white; }
-
-
-#chat-area span                 { color: white; background: #333; padding: 4px 8px; -moz-border-radius: 5px; -webkit-border-radius: 8px; margin: 0 5px 0 0; }
-
-
-#chat-area p                    { padding: 8px 0; border-bottom: 1px solid #ccc; }
-
-#date { float: left; color: black; font-size: 10px; }
+#ForumSend {
+	margin: 10px;
+}

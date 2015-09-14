@@ -95,8 +95,9 @@
 			});
 			
 			//Scroll to the sessionRecording
+			var navHeight = $('.navbar').height() - 5;
 			$('html, body').animate({
-				scrollTop: $('#region-main').offset().top-50}, 
+				scrollTop: $('#webinarContainer').offset().top-navHeight}, 
 			1000);
 		});
 		

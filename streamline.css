@@ -15,7 +15,6 @@
 	height: 650px;
 	position: relative;
 	float: left;
-	min-height: 650px;
 	margin-left: 0px;
 
 }
@@ -23,16 +22,20 @@
 #rightContainer {
 	box-sizing:border-box; 
 	/* width: 25%; */
-	height: 650px;
 	position: relative;
 	float: left;
-	min-height: 650px;
 	margin-left: 0px;
 
 }
 
 #top_liveView {
-	width: 100%;
+	position: fixed;
+	top: 0px;
+	z-index: 9999;
+	left: 25%;
+	right: 25%;
+
+	width: 50%;
 	text-align: center;
 	margin: 2px;
 	background-color: #F0F0F0;
@@ -40,9 +43,12 @@
 }
 
 #recordStatus {
+  height: 40px;
+  line-height: 30px;
   padding: 5px;
   border: 1px solid transparent;
   border-radius: 4px;
+  box-sizing: border-box;
 }
 
 .recordStatus_On{
@@ -176,6 +182,7 @@
     background:url(./images/fullscreen_button_down.png) no-repeat;
 	background-size: 100%;
 	height: 65vw;
+	cursor: pointer;
 }
 
 .quiz_button:hover {
@@ -188,6 +195,7 @@
     background:url(./images/leave_button_down.png) no-repeat;
 	background-size: 100%;
 	height: 65vw;
+	cursor: pointer;
 }
 
 #dropdownMenu1:hover {

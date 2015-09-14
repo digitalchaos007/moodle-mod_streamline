@@ -11,6 +11,7 @@
    
     <link rel="stylesheet" href="css/kube.min.css" />
     <link rel="stylesheet" href="css/your-styles.css" />
+	<link rel="stylesheet" href="Forums/Forum.css" />
  
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
     <script src="js/kube.min.js"></script>
@@ -36,6 +37,9 @@
 </head>
 
 <body>
+  <div id="forum_module">
+	<?php echo $streamline->name ?> Forum
+  </div>
   <div class="units-row">
     <div class="unit-100">
       <p class="h3"> 

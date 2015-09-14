@@ -3,8 +3,8 @@
 <!-- Modal -->
 <div class="modal fade" id="quizModal" role="dialog">
 	<div class="modal-dialog">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal">&times;</button>
+		<div class="modal-header header-shadow">
+			<button type="button" id="modal_close" class="close" data-dismiss="modal">&times;</button>
 			<h4 class="modal-title">Quiz</h4>
 		</div>
 		<div class="modal-body">
@@ -57,10 +57,7 @@
 	var x2js = new X2JS(); 
 	var xml = loadXMLDoc('Quiz/quiz_example.xml');
 	var xmlText = new XMLSerializer().serializeToString(xml);
-	console.log(xmlText);
-	console.log("QUIZ XML:");
 	var quizJSON = x2js.xml_str2json( xmlText );
-	console.log(quizJSON);
 
 	for(i=0; i< quizJSON.quizzes.quiz.length; i++) {
 		var quiz = "<li class='quizOption' data-toggle='modal' data-target='#quizModal' onclick='populateQuiz("+(i)+")'>Quiz "+(i+1)+"</li>";
@@ -68,13 +65,13 @@
 	}
 	
 	function populateQuiz(id) {
+	
+		$('.modal-title').text("Quiz " + (id+1));
 		
 		//Check if a quiz with the specified ID exists
-		console.log("Quiz " + id + " loading ... ");
 		if(i <= quizJSON.quizzes.quiz.length) {
 			$("#quizForm").empty();
 			for(i=0; i<quizJSON.quizzes.quiz[id].question.length; i++) {
-				console.log("Appending Question");
 				$("#quizForm").append("<b>Question " + (i+1) + "</b> : " + quizJSON.quizzes.quiz[id].question[i]._text + "<br>");
 				for(j=0; j<quizJSON.quizzes.quiz[id].question[i].option.length; j++) {
 					var option = quizJSON.quizzes.quiz[id].question[i].option[j]._text;

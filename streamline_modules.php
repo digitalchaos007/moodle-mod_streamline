@@ -28,10 +28,10 @@
 <link rel="stylesheet" type="text/css" href="Quiz/quiz.css">
 
 <body>
-<div id ="top_liveView">
+	<div id ="top_liveView">
 		<div id="recordStatus" class="recordStatus_Off"> This Lecture is not being recorded </div>
 	</div>
-	<div class="units-row units-split">
+	<div id="webinarContainer" class="units-row units-split">
 	
 		<!-- Container for the webinar/ BigBlueButton-->
 		<div class="unit-75" id="middleContainer">
@@ -112,3 +112,35 @@
 	<?php include 'Quiz/quiz.php';?>
 
 </body>
+
+<script>
+$( document ).ready(function() {
+	var windowHeight = window.innerHeight;
+	var navHeight = $('.navbar').height()
+	containerHeight = windowHeight - navHeight;
+    $('#middleContainer').height(containerHeight);
+	$('#rightContainer').height(containerHeight);
+	
+	//Set webinar height dynamically 
+	var webinarButtonHeight = $('.fullscreen_button').height();
+	$('#webinar_buttons').height(webinarButtonHeight);
+	
+	//Set chat module height dynamically
+	var chatModuleHeight = containerHeight - webinarButtonHeight;
+	$('#chat_module').height(chatModuleHeight);
+	
+	//Set chat height dynamically
+	var sendBox = $('#sendie').outerHeight();
+	var sendBoxTitle = $('.chat_send_msg').height();
+	console.log("Send Box: " + sendBox);
+	console.log("Send Msg: " + sendBoxTitle);
+	console.log("Chat Mod: " + $('#chat_module').height());
+	
+	var chatHeight = $('#chat_module').height() - sendBox - sendBoxTitle;
+	console.log("Chat Height: " + chatHeight);
+	$('#chat').outerHeight(chatHeight);
+	
+	console.log("Setting Middle Container Height");
+});
+
+</script>
