@@ -28,8 +28,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_streamline';
-$plugin->version = 1;
-$plugin->release = 'v0.1';
+$plugin->version = 20120627045;
+$plugin->release = 'v4.3';
 $plugin->requires = 2014051600;
 $plugin->maturity = MATURITY_ALPHA;
 $plugin->cron = 0;
