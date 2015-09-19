@@ -141,6 +141,8 @@
 		});
 		$('#quizModal').hide();
 		$('.modal-backdrop').hide();
+		$('body').removeClass( "modal-open" );
+
 	  return false;
 	});
 
