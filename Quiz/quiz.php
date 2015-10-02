@@ -135,6 +135,7 @@
 		}
 	}
 	
+	var data;
 	$('#quizForm').submit(function() {
 	
 		var answerArray = []
@@ -146,19 +147,17 @@
 				answerArray.push(checkboxes[i].id);
 			}
 		}
-		
-		//hey
 	
 		sid = <?=json_encode($streamline->id)?>;
 		stuid = <?=json_encode($USER->id)?>
-
-
 		
-		alert(answerArray);
+		data={ "sid" : sid, "stuid" : stuid, "answers" : answerArray };
 		
-		var post_data = $('#quizForm').serialize();
-			$.post('Quiz/quiz_submit.php', post_data, function(data) {
+		console.log(data);
+		
+		$.post('Quiz/quiz_submit.php', data, function(data) {
 		});
+		
 		$('#quizModal').hide();
 		$('.modal-backdrop').hide();
 		$('body').removeClass( "modal-open" );
