@@ -15,7 +15,7 @@
 
 			socket.on('co',function(data) {
 				var Hstu = <?=json_encode($HStuList)?>;
-			  if(data == 'N'){
+			  if(data == 'Y'){
 					var stu = <?=json_encode($StuList)?>;
 					if(stu.indexOf("-") > -1 && Hstu.indexOf("-") > -1){
 						socket.emit('Sending',stu,Hstu,id);
