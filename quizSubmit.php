@@ -119,7 +119,7 @@
 				
 				$str .= "</quiz> \n";
 			}
-			
+			$str .= "</quizzes> \n";
 			$dataObj = new stdClass();
 			$dataObj->id = $streamline -> id;
 			$dataObj -> quiz_xml = $str;
