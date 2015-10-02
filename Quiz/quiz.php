@@ -125,7 +125,7 @@
 					} else {
 						var option = question.option[j]._text;
 					}
-					$("#quizForm").append("<input type='checkbox' name='quiz"+(id+1)+" value='"+option+"'/>"+option+"<br>");
+					$("#quizForm").append("<input type='checkbox' id='"+(i+1)+"."+(j+1)+"' name='quiz"+(id+1)+" value='"+option+"'/>"+option+"<br>");
 				}
 				$("#quizForm").append("<br>");
 			}
@@ -136,6 +136,24 @@
 	}
 	
 	$('#quizForm').submit(function() {
+	
+		var answerArray = []
+		
+		var checkboxes = $('input:checkbox');
+		
+		for(i=0;i<checkboxes.length;i++) {
+			if(checkboxes[i].checked) {
+				answerArray.push(checkboxes[i].id);
+			}
+		}
+	
+		sid = <?=json_encode($streamline->id)?>;
+		stuid = <?=json_encode($USER->id)?>
+
+
+		
+		alert(answerArray);
+		
 		var post_data = $('#quizForm').serialize();
 			$.post('Quiz/quiz_submit.php', post_data, function(data) {
 		});
