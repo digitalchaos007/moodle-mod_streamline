@@ -66,6 +66,8 @@
 	console.log(xmlText);
 	var quizJSON = x2js.xml_str2json( xmlText );
 
+	var currentQuizId;
+	
 	if(quizJSON.quizzes.quiz instanceof Array) {
 		for(i=0; i< quizJSON.quizzes.quiz.length; i++) {
 			var quiz = "<li class='quizOption' data-toggle='modal' data-target='#quizModal' onclick='populateQuiz("+(i)+")'>Quiz "+(i+1)+"</li>";
@@ -78,8 +80,36 @@
 		$("#quiz_menu").append(quiz);
 	}
 	
+	function displaySummary(id) {
+	
+		$('.modal-title').text("Quiz " + (id+1));
+		$("#quizForm").empty();
+		
+		console.log("Obtaining Results");
+		//obtainSummaryData();
+		
+		sid = <?=json_encode($streamline->id)?>;
+		cid = <?=json_encode($COURSE->id)?>
+		
+		data={ "qid" : id, "sid" : sid, "cid" : cid};
+
+		function obtainSummaryData(){
+            $.ajax({
+                type: "POST",
+                url: "Quiz/quiz_results.php",
+                data: {data:id},
+                success: function(data){
+                    alert(data);
+                }
+            });
+        }
+		
+	}
+	
 	function populateQuiz(id) {
 	
+		currentQuizId = id+1;
+		
 		$('.modal-title').text("Quiz " + (id+1));
 		
 		//Check if a quiz with the specified ID exists
@@ -148,15 +178,19 @@
 			}
 		}
 	
-		sid = <?=json_encode($streamline->id)?>;
-		stuid = <?=json_encode($USER->id)?>
+		sid = <?=json_encode($cm->id)?>;
+		stuid = <?=json_encode($USER->id)?>;
+		cid = <?=json_encode($COURSE->id)?>;
+		qid = currentQuizId;
 		
-		data={ "sid" : sid, "stuid" : stuid, "answers" : answerArray };
+		data={ "qid" : qid, "sid" : sid, "cid" : cid, "stuid" : stuid, "answers" : answerArray };
 		
 		console.log(data);
 		
 		$.post('Quiz/quiz_submit.php', data, function(data) {
 		});
+		
+		displaySummary(currentQuizId);
 		
 		$('#quizModal').hide();
 		$('.modal-backdrop').hide();
