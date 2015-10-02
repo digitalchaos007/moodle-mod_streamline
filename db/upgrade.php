@@ -314,6 +314,14 @@ function xmldb_streamline_upgrade($oldversion) {
 	  if (!$dbman->field_exists($table, $field)) {
 		$dbman->add_field($table, $field);
 	}
+	
+	//TODO: A fix is required to add this field from within the if statement - Please remove the following code once the fix is made - Akshay & Matt
+	$table = new xmldb_table('streamline');
+	$field = new xmldb_field('quiz_xml', XMLDB_TYPE_TEXT, 'medium', null, null, null, null, null);
+	  if (!$dbman->field_exists($table, $field)) {
+		$dbman->add_field($table, $field);
+	}
+	
 
     /*
      * And that's all. Please, examine and understand the 3 example blocks above. Also

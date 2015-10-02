@@ -1,3 +1,7 @@
+<?php
+	echo $streamline->quiz_xml;
+?>
+
 <!-- Quiz -->
 
 <!-- Modal -->
@@ -57,25 +61,101 @@
 	var x2js = new X2JS(); 
 	var xml = loadXMLDoc('Quiz/quiz_example.xml');
 	var xmlText = new XMLSerializer().serializeToString(xml);
+	xmlText = <?=json_encode($streamline->quiz_xml)?>;
+	console.log("QUIZ");
+	console.log(xmlText);
 	var quizJSON = x2js.xml_str2json( xmlText );
 
-	for(i=0; i< quizJSON.quizzes.quiz.length; i++) {
+	var currentQuizId;
+	
+	if(quizJSON.quizzes.quiz instanceof Array) {
+		for(i=0; i< quizJSON.quizzes.quiz.length; i++) {
+			var quiz = "<li class='quizOption' data-toggle='modal' data-target='#quizModal' onclick='populateQuiz("+(i)+")'>Quiz "+(i+1)+"</li>";
+			$("#quiz_menu").append(quiz);
+		}		
+	} else {
+		console.log("Added drop down");
+		i = 0;
 		var quiz = "<li class='quizOption' data-toggle='modal' data-target='#quizModal' onclick='populateQuiz("+(i)+")'>Quiz "+(i+1)+"</li>";
 		$("#quiz_menu").append(quiz);
 	}
 	
+	function displaySummary(id) {
+	
+		$('.modal-title').text("Quiz " + (id+1));
+		$("#quizForm").empty();
+		
+		console.log("Obtaining Results");
+		//obtainSummaryData();
+		
+		sid = <?=json_encode($streamline->id)?>;
+		cid = <?=json_encode($COURSE->id)?>
+		
+		data={ "qid" : id, "sid" : sid, "cid" : cid};
+
+		function obtainSummaryData(){
+            $.ajax({
+                type: "POST",
+                url: "Quiz/quiz_results.php",
+                data: {data:id},
+                success: function(data){
+                    alert(data);
+                }
+            });
+        }
+		
+	}
+	
 	function populateQuiz(id) {
 	
+		currentQuizId = id+1;
+		
 		$('.modal-title').text("Quiz " + (id+1));
 		
 		//Check if a quiz with the specified ID exists
-		if(i <= quizJSON.quizzes.quiz.length) {
+		
+		//Obtain number of quizzes
+		if(quizJSON.quizzes.quiz instanceof Array) {
+			number_of_quizzes = quizJSON.quizzes.quiz.length;
+			quiz = quizJSON.quizzes.quiz[id];
+		} else {
+			number_of_quizzes = 1;
+			quiz = quizJSON.quizzes.quiz;
+		}
+				
+		if(id <= number_of_quizzes) {
 			$("#quizForm").empty();
-			for(i=0; i<quizJSON.quizzes.quiz[id].question.length; i++) {
-				$("#quizForm").append("<b>Question " + (i+1) + "</b> : " + quizJSON.quizzes.quiz[id].question[i]._text + "<br>");
-				for(j=0; j<quizJSON.quizzes.quiz[id].question[i].option.length; j++) {
-					var option = quizJSON.quizzes.quiz[id].question[i].option[j]._text;
-					$("#quizForm").append("<input type='checkbox' name='quiz"+(id+1)+" value='"+option+"'/>"+option+"<br>");
+			
+			//Obtain number of questions
+			if(quiz.question instanceof Array) {
+				number_of_questions = quiz.question.length;
+			} else {
+				number_of_questions = 1;
+			}
+
+			for(i=0; i<number_of_questions; i++) {
+				if(number_of_questions == 1) {
+					$("#quizForm").append("<b>Question " + (i+1) + "</b> : " + quiz.question._text + "<br>");
+					question = quiz.question;
+				} else {
+					$("#quizForm").append("<b>Question " + (i+1) + "</b> : " + quiz.question[i]._text + "<br>");
+					question = quiz.question[i];
+				}
+				
+				//Obtain number of options
+				if(question.option instanceof Array) {
+					number_of_options = question.option.length;
+				} else {
+					number_of_options = 1;
+				}
+				
+				for(j=0; j<number_of_options; j++) {
+					if(number_of_options == 1) {
+						var option = question.option._text;
+					} else {
+						var option = question.option[j]._text;
+					}
+					$("#quizForm").append("<input type='checkbox' id='"+(i+1)+"."+(j+1)+"' name='quiz"+(id+1)+" value='"+option+"'/>"+option+"<br>");
 				}
 				$("#quizForm").append("<br>");
 			}
@@ -85,12 +165,37 @@
 		}
 	}
 	
+	var data;
 	$('#quizForm').submit(function() {
-		var post_data = $('#quizForm').serialize();
-			$.post('Quiz/quiz_submit.php', post_data, function(data) {
+	
+		var answerArray = []
+		
+		var checkboxes = $('input:checkbox');
+		
+		for(i=0;i<checkboxes.length;i++) {
+			if(checkboxes[i].checked) {
+				answerArray.push(checkboxes[i].id);
+			}
+		}
+	
+		sid = <?=json_encode($cm->id)?>;
+		stuid = <?=json_encode($USER->id)?>;
+		cid = <?=json_encode($COURSE->id)?>;
+		qid = currentQuizId;
+		
+		data={ "qid" : qid, "sid" : sid, "cid" : cid, "stuid" : stuid, "answers" : answerArray };
+		
+		console.log(data);
+		
+		$.post('Quiz/quiz_submit.php', data, function(data) {
 		});
+		
+		displaySummary(currentQuizId);
+		
 		$('#quizModal').hide();
 		$('.modal-backdrop').hide();
+		$('body').removeClass( "modal-open" );
+
 	  return false;
 	});
 
