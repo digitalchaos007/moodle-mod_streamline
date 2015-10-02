@@ -13,15 +13,25 @@
 
 <script type="text/javascript" src="<?php Print($moodle_dir);?>/mod/streamline/3rd-party.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="Quiz/xml2json.min.js"></script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		
 <link rel="stylesheet" type="text/css" href="streamline.css">
-
-
+<link rel="stylesheet" type="text/css" href="Quiz/quiz.css">
 
 <body>
-<div id ="top_liveView">
+	<div id ="top_liveView">
 		<div id="recordStatus" class="recordStatus_Off"> This Lecture is not being recorded </div>
 	</div>
-	<div class="units-row units-split">
+	<div id="webinarContainer" class="units-row units-split">
 	
 		<!-- Container for the webinar/ BigBlueButton-->
 		<div class="unit-75" id="middleContainer">
@@ -69,13 +79,17 @@
 		</div>
 		<div  class="unit-25" id="rightContainer">
 			<div id="webinar_buttons">
-				<div id="std_button" class="fullscreen_button">
+				<div id="std_button" class="fullscreen_button" title="Full screen">
 					<img src="./images/fullscreen_button.png" style='width: 100%; object-fit: contain; visibility:hidden' />
 				</div>
-				<div id="std_button" class="quiz_button">
+				<div id="std_button" class="quiz_button" class="dropdown" id="dropdownMenu1" title="Quiz">
+				  <div class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 					<img src="./images/fullscreen_button.png" style='width: 100%; object-fit: contain; visibility:hidden' />
+				  </div>
+				  <ul id="quiz_menu" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+				  </ul>
 				</div>
-				<div id="std_button" class="leave_button">
+				<div id="std_button" class="leave_button" title="Exit">
 					<img src="./images/fullscreen_button.png" style='width: 100%; object-fit: contain; visibility:hidden' />
 				</div>
 			</div>
@@ -95,4 +109,38 @@
     <div id="notifications" aria-live="polite" role="region" aria-label="Chat Notifications"></div>
 	<?php include 'Forums/Forum.php';?>
 	
+	<?php include 'Quiz/quiz.php';?>
+
 </body>
+
+<script>
+$( document ).ready(function() {
+	var windowHeight = window.innerHeight;
+	var navHeight = $('.navbar').height()
+	containerHeight = windowHeight - navHeight;
+    $('#middleContainer').height(containerHeight);
+	$('#rightContainer').height(containerHeight);
+	
+	//Set webinar height dynamically 
+	var webinarButtonHeight = $('.fullscreen_button').height();
+	$('#webinar_buttons').height(webinarButtonHeight);
+	
+	//Set chat module height dynamically
+	var chatModuleHeight = containerHeight - webinarButtonHeight;
+	$('#chat_module').height(chatModuleHeight);
+	
+	//Set chat height dynamically
+	var sendBox = $('#sendie').outerHeight();
+	var sendBoxTitle = $('.chat_send_msg').height();
+	console.log("Send Box: " + sendBox);
+	console.log("Send Msg: " + sendBoxTitle);
+	console.log("Chat Mod: " + $('#chat_module').height());
+	
+	var chatHeight = $('#chat_module').height() - sendBox - sendBoxTitle;
+	console.log("Chat Height: " + chatHeight);
+	$('#chat').outerHeight(chatHeight);
+	
+	console.log("Setting Middle Container Height");
+});
+
+</script>
