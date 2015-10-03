@@ -80,31 +80,80 @@
 		$("#quiz_menu").append(quiz);
 	}
 	
-	function displaySummary(id) {
+	var summaryData;
+	
+	function QuizSummary(id) {
 	
 		$('.modal-title').text("Quiz " + (id+1));
 		$("#quizForm").empty();
 		
 		console.log("Obtaining Results");
-		//obtainSummaryData();
+		obtainSummaryData();
 		
 		sid = <?=json_encode($streamline->id)?>;
 		cid = <?=json_encode($COURSE->id)?>
 		
 		data={ "qid" : id, "sid" : sid, "cid" : cid};
-
+		console.log(data);
+		
 		function obtainSummaryData(){
             $.ajax({
                 type: "POST",
                 url: "Quiz/quiz_results.php",
                 data: {data:id},
                 success: function(data){
-                    alert(data);
+					console.log(data);
+					summaryData = JSON.parse(data);
+					displayQuizSummary(summaryData);
                 }
             });
         }
 		
 	}
+	
+	function displayQuizSummary(data) {
+		console.log("Loading Quiz Summary");
+		$('.modal-title').text(summaryData.quiz);
+			
+		//Obtain number of quizzes
+		if(quizJSON.quizzes.quiz instanceof Array) {
+			quiz = quizJSON.quizzes.quiz[id];
+		} else {
+			quiz = quizJSON.quizzes.quiz;
+		}
+		
+		var percentage;
+		var number_of_questions = summaryData.data.length;
+		for(i=0; i<number_of_questions; i++) {
+				if(number_of_questions == 1) {
+					console.log("Single Question");
+					$("#quizForm").append("<b>Question " + (i+1) + "</b> : " + quiz.question._text + "<br>");
+					question = quiz.question;
+				} else {
+					console.log("Multiple Questions");
+					$("#quizForm").append("<b>Question " + (i+1) + "</b> : " + quiz.question[i]._text + "<br>");
+					question = quiz.question[i];
+				}
+				right_percentage = summaryData.data[i][1]*100;
+				wrong_percentage = 100-right_percentage;
+				$("#quizForm").append('<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-success active" style="width: '+right_percentage+'%">'+right_percentage+'%<span class="sr-only">'+right_percentage+'% Complete (success)</span></div><div class="progress-bar progress-bar-striped progress-bar-danger active" style="width: '+wrong_percentage+'%">'+wrong_percentage+'%<span class="sr-only">'+wrong_percentage+'% Complete (danger)</span></div></div>');
+		}
+		
+		/*
+		<div class="progress">
+		  <div class="progress-bar progress-bar-success" style="width: 35%">
+			<span class="sr-only">35% Complete (success)</span>
+		  </div>
+		  <div class="progress-bar progress-bar-warning progress-bar-striped" style="width: 20%">
+			<span class="sr-only">20% Complete (warning)</span>
+		  </div>
+		  <div class="progress-bar progress-bar-danger" style="width: 10%">
+			<span class="sr-only">10% Complete (danger)</span>
+		  </div>
+		</div>
+		*/
+	}
+	
 	
 	function populateQuiz(id) {
 	
@@ -190,11 +239,11 @@
 		$.post('Quiz/quiz_submit.php', data, function(data) {
 		});
 		
-		displaySummary(currentQuizId);
+		QuizSummary(currentQuizId);
 		
-		$('#quizModal').hide();
-		$('.modal-backdrop').hide();
-		$('body').removeClass( "modal-open" );
+		//$('#quizModal').hide();
+		//$('.modal-backdrop').hide();
+		//$('body').removeClass( "modal-open" );
 
 	  return false;
 	});
