@@ -1,8 +1,9 @@
 <?php
 
 
-	global $DB;
-
+require_once(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php'); 
+ global $DB, $CFG;
+ 
 	$qid = $_POST['qid'];
 	$sid = $_POST['sid'];
 	$cid = $_POST['cid'];

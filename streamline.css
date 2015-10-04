@@ -31,7 +31,7 @@
 #top_liveView {
 	position: fixed;
 	top: 0px;
-	z-index: 9999;
+	z-index: 1030;
 	left: 25%;
 	right: 25%;
 

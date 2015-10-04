@@ -196,7 +196,7 @@ function xmldb_streamline_upgrade($oldversion) {
     }
 
 
-    if ($oldversion < 201206272000) {
+    if ($oldversion < 20150627099) {
         //-------------------------------------------------------------------------------------------------
         // Creating the streamline  table
         //-------------------------------------------------------------------------------------------------
@@ -214,7 +214,6 @@ function xmldb_streamline_upgrade($oldversion) {
         
         // Add field course.
         if (!$dbman->field_exists($table2, $field2)) {
-	    echo 'about to add quiz id';
             $dbman->add_field($table2, $field2);
         }
         
@@ -248,7 +247,7 @@ function xmldb_streamline_upgrade($oldversion) {
             $dbman->add_field($table2, $field6);
         }
 
-	if (!$dbman->table_exists($table2)) {
+		if (!$dbman->table_exists($table2)) {
            $dbman->create_table($table2);
         }
         //-------------------------------------------------------------------------------------------------
@@ -258,7 +257,7 @@ function xmldb_streamline_upgrade($oldversion) {
     // Second example, some hours later, the same day 2007/04/01
     // ... two more fields and one index were added to install.xml (note the micro increment
     // ... "01" in the last two digits of the version).
-    if ($oldversion < 2015072101) {
+    if ($oldversion < 2015100400) {
         // Define field timecreated to be added to streamline.
         $table = new xmldb_table('streamline');
         $field = new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0',
