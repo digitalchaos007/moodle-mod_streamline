@@ -101,6 +101,9 @@
     border-radius: 30px;
 	padding-left: 25px;
 	padding-right: 25px;
+	
+	word-wrap: normal;
+	display: inline-block;
 }
 
 .incorrect_answer {
@@ -111,4 +114,12 @@
     border-radius: 30px;
 	padding-left: 25px;
 	padding-right: 25px;
+	
+	word-wrap: normal;
+	display: inline-block;
+}
+
+.summary_overview {
+	width: 100%;
+	float: left;
 }

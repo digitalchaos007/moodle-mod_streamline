@@ -134,14 +134,19 @@
 		var percentage;
 		var number_of_questions = summaryData.data.length;
 		
+		var tick = '<img class="tick" src="./Quiz/images/tick.png">';
+		var cross = '<img class="cross" src="./Quiz/images/cross.png">';
 
 		for(i=0; i<number_of_questions; i++) {
 		
 				student_div = "student_overview_q"+(i+1);
 				class_div = "class_overview_q"+(i+1);
+				summary_div = "summary_overview_q"+(i+1);
 		
-				$("#quizForm").append('<div class="student_overview" id="'+student_div+'"></div>');
-				$("#quizForm").append('<div class="class_overview" id="'+class_div+'"></div>');
+				$("#quizForm").append('<div class="summary_overview" id="'+summary_div+'"></div>');
+				
+				$("#"+summary_div+"").append('<div class="student_overview" id="'+student_div+'"></div>');
+				$("#"+summary_div+"").append('<div class="class_overview" id="'+class_div+'"></div>');
 		
 				question_div_id	= "question_" + (i+1);
 		
@@ -176,10 +181,8 @@
 
 					if(answerArray[currentQuizId-1].indexOf(answer_id) != -1) {
 						if(answers.indexOf(answer_id) != -1) {
-							var tick = '<img class="tick" src="./Quiz/images/tick.png">';
 							option_text=option+tick;
 						} else {
-							var cross = '<img class="cross" src="./Quiz/images/cross.png">';
 							option_text=option+cross;
 							isCorrect = false;
 						}
@@ -198,9 +201,9 @@
 					$("#"+answer_div_id+"").attr("disabled", true);
 				}
 				if(isCorrect) {
-					$("#"+question_div_id+"").append("<span class='correct_answer'>Correct</div>");					
+					$("#"+question_div_id+"").append("<span class='correct_answer'>Correct<br></div>");					
 				} else {
-					$("#"+question_div_id+"").append("<span class='incorrect_answer'>Incorrect</div>");	
+					$("#"+question_div_id+"").append("<span class='incorrect_answer'>Incorrect<br></div>");	
 				}
 				$("#"+student_div+"").append("<br>");
 				
