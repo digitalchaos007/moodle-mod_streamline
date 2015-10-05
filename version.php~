@@ -28,13 +28,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_streamline';
-<<<<<<< HEAD
-$plugin->version = 20120627046;
+$plugin->version = 20120627049;
 $plugin->release = 'v4.3';
-=======
-$plugin->version = 20120627055;
-$plugin->release = 'v4.4';
->>>>>>> b2ccb930bfdf53c1b99d48459bc81551ef3d1e60
 $plugin->requires = 2014051600;
 $plugin->maturity = MATURITY_ALPHA;
 $plugin->cron = 0;
