@@ -1,3 +1,3 @@
-1\n64\n2\n2\n1.2\n answers 01.2\n answers 11.2\n answers 21.2\n answers 31.2\n answers 41.2\n answers 51.2\n answers 6error exception 'Exception' with message 'Always throw this error' in C:\wamp\www\moodle\mod\streamline\Quiz\quiz_submit.php:35
+1\n69\n2\n2\n3.1\n answers 03.1\n answers 1error exception 'Exception' with message 'Always throw this error' in C:\wamp\www\moodle\mod\streamline\Quiz\quiz_submit.php:35
 Stack trace:
 #0 {main}\ncompleted 5 \n

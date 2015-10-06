@@ -1,6 +1,5 @@
 <?php 
 
-	
 	require_once(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php'); 
 	global $DB, $CFG, $COURSE;
 	
@@ -15,7 +14,7 @@
 	$records = $DB->get_records_sql($sql); //array($string_sid ,$string_cid ,$string_qid)
 
 	
-	
+	$answers = null;
 	$answers_count = 0;
 	foreach ($records as $id => $record) {
 		$answers[$answers_count] = $record->answers;
@@ -161,9 +160,11 @@
 			}
 			$student_Sum++;
 		}
-		$ratio_array[$ratio_count] = (int) $correct_sum / (int) $student_Sum;
-		$ratio_count++;
-		
+		if($student_Sum != 0)
+		{
+			$ratio_array[$ratio_count] = (int) $correct_sum / (int) $student_Sum;
+			$ratio_count++;
+		}
 		
 	}
 	//prints ratio array for testing
@@ -181,7 +182,7 @@
 	}
 	
 	//prints the data array for testing
-	//print_r($data_array); 
+	print_r($data_array); 
 	
 	$results = new stdClass();
 	$results->quiz="Quiz " . $qid;
