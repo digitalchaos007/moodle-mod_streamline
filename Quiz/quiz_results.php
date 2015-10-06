@@ -11,8 +11,6 @@
 	$string_qid = "'". $qid . "'";
 	$string_sid = "'". $sid . "'";
 	$string_cid = "'". $cid . "'";
-	print_r($_POST);
-	echo $correct_answers;
 	$sql =  "SELECT id, quizid, streamlineid, courseid, userid, answers FROM mdl_streamline_quiz WHERE streamlineid= '".$sid."' AND courseid= '".$cid."' AND quizid= '".$qid."'";
 	$records = $DB->get_records_sql($sql); //array($string_sid ,$string_cid ,$string_qid)
 
@@ -24,11 +22,18 @@
 		$answers_count++;
 	}
 
+	//////////////////////////////////////////////////////////////////////////
+	/* This section converts all correct answers into a comparable way by splitting
+	it into an array of strings where each string is the correct answers for a question.
+	Therefore the number of questions there are is the number of elements in this
+	array.
+	*/
+	/////////////////////////////////////////////////////////////////////////
+	
 	$questions_count = 0;
 	$questions = null;
 	$group_answers = null;
 	$grouped_answer_count = 0;
-	echo "string length " . (int) (strlen($correct_answers)-3) . " " . $correct_answers . " ";
 	
 	
 	for($i = 0; $i < strlen($correct_answers)-3; $i++)
@@ -36,27 +41,31 @@
 		if(substr($correct_answers,$i+1,1) == ".")
 		{
 			$is_unique = 1;
-			for($k = 0; $k < sizeof($questions); $k++)
+			if($grouped_answer_count == 0)
 			{
-				if($questions[k] == substr($correct_answers,$i,1))
+				$questions[0] = substr($correct_answers,$i,1);
+				$questions_count++;
+			}
+			else{
+				
+				for($k = 0; $k < sizeof($questions); $k++)
 				{
-					$is_unique = 0;
+					if($questions[$k] == substr($correct_answers,$i,1))
+					{
+						$is_unique = 0;
+					}
 				}
-				else
-				{
-					$questions[$questions_count] = substr($correct_answers,$i,1);
-					$questions_count++;
-				}
-
 			}
 			if($is_unique == 1)
 			{
+				$questions[$questions_count] = substr($correct_answers,$i,1);
+				$questions_count++;
 				$group_answers[$grouped_answer_count] = substr($correct_answers,$i,4);
-				for($j = $i; $j < strlen($correct_answers)-3; $j++)
+				for($j = ($i + 1); $j < strlen($correct_answers)-3; $j++)
 				{
 					if(substr($correct_answers,$i,1) == substr($correct_answers,$j,1) && substr($correct_answers,$i+1,1) == '.' && substr($correct_answers,$j+1,1) == '.')
 					{
-						$group_answers[$grouped_answer_count] += substr($correct_answers,$j,4);
+						$group_answers[$grouped_answer_count] = $group_answers[$grouped_answer_count] . substr($correct_answers,$j,4);
 					
 					}
 
@@ -67,100 +76,116 @@
 
 	}
 	
-	
-	//sort the answers into groups
-	
-	
-	
-	
-	//Compare students to answers
-	
-	
-	
-	//echo "HELLLOOOOOOOOOOOOOOOOO" . $qid . " " . $sid . " " . $cid . " hELLOOOOOOOOOOOOOOOOOOOO";
-	
-	
-	//$query = mysqli_query("SELECT * FROM mdl_streamline_quiz WHERE streamlineid='". $sid ."' AND courseid='". $cid ."' AND quizid='".$qid ."'");	
-	//$answers = $row['answers'];
-	//$answers = array("1.1");
-	/*$answers_final; // my array which contains all answers with respective answers
-	$count = 0;
-	for($i = 0; $i < sizeof($answers); $i++)
-	{
-		$tok = explode(";",$answers[$i]);
-		
-		for($j = 0; $j < sizeof($tok); $j++)
-		{
-			$answers_final[$count] = $tok[$j];
-			$count = $count + 1;
-		}
-	
-	}
+	//////////////////////////////////////////////////////////////////////////
+	/* This section converts all answers from each student in a way to compare
+	to the actual answers. This will ultimately provide an array of arrays where
+	each array will represent a students answers and within that will be the students
+	answers for each question.
+	*/
+	/////////////////////////////////////////////////////////////////////////
 
-
-	$unique = array_unique($answers_final); // keeps only unique elements
-	$result = array_filter($unique); // removes empty answers
-	$result = array_values($result); // fixes array index
-	echo print_r($result);
-	$answer_counts;
-	//$count2 = 0;
-	for($i = 0; $i < sizeof($result); $i++)
-	{
-		$freqs = array_count_values($answers_final);
-		//echo "array finals" . print_r($freqs);
-		$cnt = $freqs[$result[$i]];
-		//$cnt = count(array_filter($answers_final,create_function('$a','return $a=='. $result[$i] .';')));
-		echo "Count " . $cnt;
-		$answer_counts[$i] = $cnt;
+	$group_student_answers_db = null;
+	$grouped_answer_count_db = 0;
 	
 	
-	}
-	//search for other answers with same question number and their counts to determine ratio
-	$ratio;
-	for($i = 0; $i < sizeof($result); $i++)
+	for($m = 0; $m < sizeof($answers); $m++)
 	{
-		$sum = $answer_counts[$i];
-		for($j = 0; $j < sizeof($result); $j++)
+	$questions_count = 0;
+	$questions_students = null;
+	$group_student_answers = null;
+	$grouped_answer_count = 0;
+	
+		for($i = 0; $i < strlen($answers[$m])-3; $i++)
 		{
-			$tok1 = strtok($result[$i] ,".");
-			$tok2 = strtok($result[$j] ,".");
-			if($tok1 == $tok2 && $i != $j)
+			if(substr($answers[$m],$i+1,1) == ".")
 			{
-				$sum += $answer_counts[$j];
-			
+				$is_unique = 1;
+				if($grouped_answer_count == 0)
+				{
+					$questions_students[0] = substr($answers[$m],$i,1);
+					$questions_count++;
+				}
+				else{
+					
+					for($k = 0; $k < sizeof($questions_students); $k++)
+					{
+						if($questions_students[$k] == substr($answers[$m],$i,1))
+						{
+							$is_unique = 0;
+						}
+					}
+				}
+				if($is_unique == 1)
+				{
+					$questions_students[$questions_count] = substr($answers[$m],$i,1);
+					$questions_count++;
+					$group_student_answers[$grouped_answer_count] = substr($answers[$m],$i,4);
+					for($j = ($i + 1); $j < strlen($answers[$m])-3; $j++)
+					{
+						if(substr($answers[$m],$i,1) == substr($answers[$m],$j,1) && substr($answers[$m],$i+1,1) == '.' && substr($answers[$m],$j+1,1) == '.')
+						{
+							$group_student_answers[$grouped_answer_count] = $group_student_answers[$grouped_answer_count] . substr($answers[$m],$j,4);
+						
+						}
+
+					}
+					$grouped_answer_count++;
+				}
 			}
-			
 		}
-		$ratio[$i] = $answer_counts[$i] / $sum;
+		
+		$group_student_answers_db[$grouped_answer_count_db] = $group_student_answers;
+		$grouped_answer_count_db++;
+
 	}
 	
-	$final;
+	///////////////////////////////////////////////////////////////////////////
+	//prints arrays for testing
+	//print_r($group_answers);
+	//print_r($group_student_answers_db);
+	//print_r($questions);
 	
-	for($i = 0; $i < sizeof($result); $i++){
+	$ratio_array = null;
+	$ratio_count = 0;
 	
-		$final[$i] = array(strtok($result[$i] ,"."), substr($result[$i], strpos($result[$i], ".") + 1),$ratio[$i]);
 	
-	}*/
-	
-	//echo "array finals" . print_r($final);
-	
-	//print_r($final);
-	
-	//make unique array http://php.net/manual/en/function.array-unique.php
-	//count how many times each element appears in that
-	// make new array to fill in these counts
-	// do a forloop through using the indexes
+	for($i = 0; $i < sizeof($group_answers); $i++){
+		$student_Sum = 0;
+		$correct_sum = 0;
+		for($j = 0; $j < sizeof($group_student_answers_db); $j++){
+			for($k = 0; $k < sizeof($group_student_answers_db[$j]); $k++){
+				if($group_answers[$i] == $group_student_answers_db[$j][$k])
+				{
+					$correct_sum++;
+				}
+			}
+			$student_Sum++;
+		}
+		$ratio_array[$ratio_count] = (int) $correct_sum / (int) $student_Sum;
+		$ratio_count++;
+		
+		
+	}
+	//prints ratio array for testing
+	//print_r($ratio_array);
+	//prints answers array for testing
+	//print_r($answers);
 
+	$data_array = null;
+	$data_array_count = 0;
 	
-	//$final;
-	//echo print_r("Array " . $group_answers . " ");
+	for($i = 1; $i < sizeof($questions); $i++){ //need to fix questions array to have initial element as the first
+		$data_array[$data_array_count] = array($questions[$i], $ratio_array[$i-1]  );
+		$data_array_count++;
+	
+	}
+	
+	//prints the data array for testing
+	//print_r($data_array); 
+	
 	$results = new stdClass();
 	$results->quiz="Quiz " . $qid;
-	$results->data = array(
-			array('q4','0.68'), // (question id, answer id, answer ratio)
-			array('q4','0.20'),
-			array('q4','0.96')
-		);
+	$results->data = $data_array;
 
 	echo json_encode($results);
 

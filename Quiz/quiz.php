@@ -91,7 +91,6 @@
 		$("#quizForm").empty();
 		
 		console.log("Obtaining Results");
-		obtainSummaryData();
 		
 		sid = <?=json_encode($streamline->id)?>;
 		cid = <?=json_encode($COURSE->id)?>;
@@ -105,20 +104,14 @@
 		console.log("This is the answers " + answering);
 		data={ "qid" : id, "sid" : sid, "cid" : cid, "answer" : answering};
 		console.log(data);
-		
-		function obtainSummaryData(){
-            $.ajax({
-                type: "POST",
-                url: "Quiz/quiz_results.php",
-                data: data,
-                success: function(data){
-					console.log("\n Quiz data" + data);
-					console.log("Got Here");
-					summaryData = JSON.parse(data);
-					console.log("Got Here 2");
-					displayQuizSummary(summaryData);
-                }
-            });
+		obtainSummaryData();
+		  function obtainSummaryData(){
+			   $.post( "Quiz/quiz_results.php", data, function( data ) {
+				console.log("Returned Data");
+				console.log(data);
+				summaryData = JSON.parse(data);
+				displayQuizSummary(summaryData);
+			   });
         }
 		
 	}
