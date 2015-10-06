@@ -182,7 +182,7 @@
 	}
 	
 	//prints the data array for testing
-	print_r($data_array); 
+	//print_r($data_array); 
 	
 	$results = new stdClass();
 	$results->quiz="Quiz " . $qid;
