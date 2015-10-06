@@ -103,7 +103,7 @@
 		}
 		
 		console.log("This is the answers " + answering);
-		data2={ "qid" : id, "sid" : sid, "cid" : cid, "answer" : answering};
+		data={ "qid" : id, "sid" : sid, "cid" : cid, "answer" : answering};
 		console.log(data);
 		
 		function obtainSummaryData(){
