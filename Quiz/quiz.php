@@ -94,19 +94,28 @@
 		obtainSummaryData();
 		
 		sid = <?=json_encode($streamline->id)?>;
-		cid = <?=json_encode($COURSE->id)?>
+		cid = <?=json_encode($COURSE->id)?>;
+		var answers = obtainAnswers(id-1);
+		var answering = ""; // have to make this a string to work for some reason
+		for(var i = 0; i < answers.length; i++)
+		{
+			answering += answers[i] + ";";
+		}
 		
-		data={ "qid" : id, "sid" : sid, "cid" : cid};
+		console.log("This is the answers " + answering);
+		data2={ "qid" : id, "sid" : sid, "cid" : cid, "answer" : answering};
 		console.log(data);
 		
 		function obtainSummaryData(){
             $.ajax({
                 type: "POST",
                 url: "Quiz/quiz_results.php",
-                data: {data:id},
+                data: data,
                 success: function(data){
-					console.log(data);
+					console.log("\n Quiz data" + data);
+					console.log("Got Here");
 					summaryData = JSON.parse(data);
+					console.log("Got Here 2");
 					displayQuizSummary(summaryData);
                 }
             });

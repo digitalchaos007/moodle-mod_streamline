@@ -104,9 +104,10 @@
     <TABLE NAME="streamline_quiz" COMMENT="The streamline table to store quiz activity events" PREVIOUS="streamline">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" />
-	<FIELD NAME="streamlineid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" />
+		<FIELD NAME="quizid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" />
+		<FIELD NAME="streamlineid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" />
         <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" />
-				<FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" />
+		<FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" />
         <FIELD NAME="answers" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="the quiz answers"/>
       </FIELDS>
       <KEYS>
